@@ -1,11 +1,26 @@
 import React from 'react';
 import Header from './Components/Header';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from "./Routes/Home"; 
+import Wallet from "./Routes/Wallet";
+import History from "./Routes/History";
+import Support from "./Routes/Support"; 
+import Login from "./Routes/Login"; 
+import Enroll from "./Routes/Enroll"; 
 
 function App() {
   return (
-    <Header>
-      button
-    </Header>
+    <Router>
+      <Routes>
+        <Route path="./" element={<Home/>}/>
+        <Route path="./wallet" element={<Wallet/>}/>
+        <Route path="./history" element={<History/>}/>
+        <Route path="./support" element={<Support/>}/>
+        <Route path="./login" element={<Login/>}/>
+        <Route path="./enroll" element={<Enroll/>}/>
+      </Routes>
+      <Header />
+    </Router>
   );
 }
 
