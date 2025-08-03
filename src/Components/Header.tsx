@@ -61,6 +61,7 @@ export const Img = styled.img`
 
 function Header() {
     const homeMatch = useMatch('/'); 
+    const marketMatch = useMatch('/market'); 
     const walletMatch = useMatch('/wallet'); 
     const histMatch = useMatch('/history');  
     const supportMatch = useMatch('/support'); 
@@ -71,6 +72,7 @@ function Header() {
             <Items>
                 <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>
+                <Item><StyledLink to="/market">{ marketMatch ? <Bold>Market</Bold> : "Market" }</StyledLink></Item>
                 <Item><StyledLink to="/wallet">{ walletMatch ? <Bold>Wallet</Bold> : "Wallet" }</StyledLink></Item>
                 <Item><StyledLink to="/history">{ histMatch ? <Bold>History</Bold> : "History" }</StyledLink></Item>
                 <Item><StyledLink to="/support">{ supportMatch ? <Bold>Support</Bold> : "Support" }</StyledLink></Item>
