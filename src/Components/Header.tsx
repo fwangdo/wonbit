@@ -53,7 +53,7 @@ const Bold = styled.span`
     font-weight: bold;
 `
 
-const Img = styled.img`
+export const Img = styled.img`
     width: 90px;
     margin-right: 30px;
 `
