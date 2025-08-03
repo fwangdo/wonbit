@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory, fetchCoinDiff } from "../api";
+import { fetchCoins, fetchCoinInfo } from "../api";
 import { styled } from "styled-components"; 
-import { createFunctionDeclaration } from "typescript";
+import { NumericLiteral } from "typescript";
 
 
 interface IHistorical {
@@ -58,8 +58,30 @@ const CoinTable = styled.table`
 
 `; 
 
+interface ICoinData {
+    // current_price: 114293
+    // high_24h: 114637
+    // id: "bitcoin"
+    // image: "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
+    // low_24h: 112125
+    // name: "Bitcoin"
+    // price_change_24h: 2167.72
+    // price_change_percentage_24h: 1.9333
+    // symbol: "btc"
+
+    current_price: number; 
+    high_24h: number;
+    id: string;
+    image: string;
+    low_24h: number; 
+    name: string;
+    price_change_24h: number; 
+    price_change_percentage_24h: number; 
+    symbol: string; 
+}; 
+
 function genCoinTable(symbol: string) {
-    const data = fetchCoinDiff(symbol); 
+    const data = fetchCoinInfo(symbol); 
     console.log(data)
     return null;  
 };
@@ -72,11 +94,10 @@ export function Market() {
             queryFn: () => fetchCoins()
         }
     );
-    console.log(data)
 
-    // if (data) {
-    //     genCoinTable(data[0].id)
-    // }
+    const btcData = fetchCoinInfo('btc').then((result) => {
+        console.log(result[0]); 
+    }); 
 
     return (
         <Container>
