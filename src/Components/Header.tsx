@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Link, useMatch } from 'react-router-dom'; 
+import wonbit from '../Assets/wonbit.jpeg'; 
 
 interface IChildren {
     children: string 
@@ -14,7 +15,7 @@ const Col = styled.div`
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: blue;
+    background-color: #3356b0;
 `;
 
 const Items = styled.ul`
@@ -52,6 +53,11 @@ const Bold = styled.span`
     font-weight: bold;
 `
 
+const Img = styled.img`
+    width: 90px;
+    margin-right: 30px;
+`
+
 
 function Header() {
     const homeMatch = useMatch('/'); 
@@ -63,6 +69,7 @@ function Header() {
         <>
         <Col>
             <Items>
+                <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>
                 <Item><StyledLink to="/wallet">{ walletMatch ? <Bold>Wallet</Bold> : "Wallet" }</StyledLink></Item>
                 <Item><StyledLink to="/history">{ histMatch ? <Bold>History</Bold> : "History" }</StyledLink></Item>
