@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory } from "../api";
+import { fetchCoins, fetchCoinHistory, fetchCoinDiff } from "../api";
 import { styled } from "styled-components"; 
 import { createFunctionDeclaration } from "typescript";
 
@@ -51,6 +51,19 @@ const Coin = styled.li`
     list-style: none;
 `;
 
+/* To generate table.
+*/
+
+const CoinTable = styled.table`
+
+`; 
+
+function genCoinTable(symbol: string) {
+    const data = fetchCoinDiff(symbol); 
+    console.log(data)
+    return null;  
+};
+
 export function Market() {
 
     const { isLoading, data } = useQuery<ICoin[]>(
@@ -59,6 +72,11 @@ export function Market() {
             queryFn: () => fetchCoins()
         }
     );
+    console.log(data)
+
+    // if (data) {
+    //     genCoinTable(data[0].id)
+    // }
 
     return (
         <Container>
