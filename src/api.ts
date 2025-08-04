@@ -35,25 +35,17 @@ function getHistRange(): string[] {
 }; 
 
 export interface IMarketData {
-    id: string;     
-    name: string; 
-    symbol: string; 
-    market_data: { 
-        current_price: {
-            usd: number;
-        };
-    } 
+    prices: Array<Array<number>[]>[]; 
 }; 
 
-export async function fetchCoinHistory(coinId: string): Promise<IMarketData[]> {
-    const range = getHistRange(); 
-    async function getUrl(date: string) {
-        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/history?date=${date}` 
+export async function fetchCoinHistory(coinId: string): Promise<IMarketData> {
+    async function getUrl() {
+        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=14&interval=daily`;
         const response = await fetch(url, options); 
         const data: IMarketData = await response.json(); 
         return data 
     }
-    const res = await Promise.all(range.map((date) => getUrl(date))); 
+    const res = await getUrl(); 
     return res; 
 }
 
