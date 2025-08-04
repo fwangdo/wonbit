@@ -11,7 +11,7 @@ import Enroll from "./Routes/Enroll";
 import { styled } from "styled-components";
 
 const ContentWrapper = styled.div`
-  background-color: #f0f0f0;
+  background-color: #e6e4e4e4;
   min-height: calc(100vh - 60px);
   padding: 5px; 
   /* display: flex; */

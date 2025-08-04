@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinInfo } from "../api";
+import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
 import { styled } from "styled-components"; 
-import { BrowserRouter as Router, Route, Link, BrowserRouter } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 
 interface IHistorical {
@@ -27,17 +27,16 @@ const Container = styled.div`
   justify-content: flex-end;
 `;
 
+// chart part
+const Chart = styled.div`
+    background-color: #000;
+`
+
+// loader.
 const Loader = styled.span`
     text-align: center;
     display: block; 
 `
-
-const Coin = styled.li`
-    background-color: white;
-    border-radius: 15px; 
-    margin-bottom: 10px;
-    list-style: none;
-`;
 
 /* To generate table.
 */
@@ -85,16 +84,6 @@ const Tr = styled.tr`
 `
 
 interface ICoinData {
-    // current_price: 114293
-    // high_24h: 114637
-    // id: "bitcoin"
-    // image: "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"
-    // low_24h: 112125
-    // name: "Bitcoin"
-    // price_change_24h: 2167.72
-    // price_change_percentage_24h: 1.9333
-    // symbol: "btc"
-
     current_price: number; 
     high_24h: number;
     id: string;
@@ -129,7 +118,8 @@ function genCoinTable(data: ICoinData[]) {
     );
 };
 
-function genCoinChart(id: string) {
+async function genCoinChart(coinId: string) {
+    const data: IMarketData[] = await fetchCoinHistory(coinId); 
     return null;
 }
 
@@ -144,18 +134,16 @@ export function Market() {
     );
 
     return (
-        <BrowserRouter>
-            <Router>
-                <Route path=":coinId" />
-            </Router>
-            <Container>
+        <Container>
+            <Routes> 
+                <Route path="/:coinId" element={<Chart />} />
+            </Routes>
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
                 ) : (
                     genCoinTable(data.slice(0, 50))
                 ) }
             </Container>
-        </BrowserRouter>
     );
 }
 
