@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinInfo } from "../api";
 import { styled } from "styled-components"; 
-import { NumericLiteral } from "typescript";
 
 
 interface IHistorical {
@@ -20,29 +19,17 @@ interface ChartProps {
   coinId: string;
 }
 
-interface ICoin {
-  id: string;
-  name: string;
-  symbol: string;
-  rank: number;
-  is_new: boolean;
-  is_active: boolean;
-  type: string;
-}
-
-
 const Container = styled.div`
-  padding: 0px 20px;
-  max-width: 480px;
-  margin: 0 auto;
+  padding: 10px 20px;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const Loader = styled.span`
     text-align: center;
     display: block; 
 `
-
-const CoinList = styled.ul``; 
 
 const Coin = styled.li`
     background-color: white;
@@ -55,8 +42,46 @@ const Coin = styled.li`
 */
 
 const CoinTable = styled.table`
-
+    /* padding: 30px; // top right bottom left */
+    width: auto;
+    border-collapse: collapse;
 `; 
+
+const Thead = styled.thead`
+    background-color: #f5f5f5;
+`;
+
+const Th = styled.th`
+    padding: 10px;
+    border: 1px solid #ffffff;
+    text-align: left;
+    font-size: 13px;
+    ` 
+
+const TdBase = styled.td`
+    padding: 8px;
+    border: 0.5px solid #ddd; 
+    font-size: 15px;
+    background-color: #ffffff;
+`; 
+
+const TdName = styled(TdBase)`
+    display: flex;
+    text-align: left;
+`
+
+const TdElem = styled(TdBase)`
+    text-align: right;
+`
+
+const Td = styled.td`
+    padding: 10px;
+    border: 1px solid #ddd; 
+    font-size: 15px;
+`; 
+
+const Tr = styled.tr`
+`
 
 interface ICoinData {
     // current_price: 114293
@@ -80,37 +105,45 @@ interface ICoinData {
     symbol: string; 
 }; 
 
-function genCoinTable(symbol: string) {
-    const data = fetchCoinInfo(symbol); 
-    console.log(data)
-    return null;  
+function genCoinTable(data: ICoinData[]) {
+    return (
+        <CoinTable>
+            <Thead>
+                <Tr>
+                    <Th>Name</Th>
+                    <Th>Price</Th>
+                    <Th>Updates</Th>
+                </Tr> 
+            </Thead>
+            <tbody>
+                {data.map((coin) =>(
+                    <Tr key={coin.symbol}>
+                        <TdName>{coin.symbol}</TdName>
+                        <TdElem>{coin.current_price}</TdElem>
+                        <TdElem>{coin.price_change_percentage_24h}</TdElem>
+                    </Tr>
+                ))}
+            </tbody>
+        </CoinTable>
+    );
 };
 
 export function Market() {
 
-    const { isLoading, data } = useQuery<ICoin[]>(
+    const { isLoading, data } = useQuery<ICoinData[]>(
         {
             queryKey: ["allCoins"],
-            queryFn: () => fetchCoins()
+            queryFn: () => fetchCoins(),
+            refetchInterval: 60 * 1000 
         }
     );
 
-    const btcData = fetchCoinInfo('btc').then((result) => {
-        console.log(result[0]); 
-    }); 
-
     return (
         <Container>
-            { isLoading ? (
+            { (!data || isLoading) ? (
                 <Loader>Loading...</Loader>
             ) : (
-                <CoinList>
-                    {data?.slice(0, 100).map((coin) => (
-                        <Coin key={coin.id}>
-                            {coin.id}
-                        </Coin>
-                    ))}
-                </CoinList>
+                genCoinTable(data.slice(0, 50))
             ) }
         </Container>
     );
