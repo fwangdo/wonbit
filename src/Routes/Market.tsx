@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinInfo } from "../api";
 import { styled } from "styled-components"; 
+import { BrowserRouter as Router, Route, Link, BrowserRouter } from "react-router-dom";
 
 
 interface IHistorical {
@@ -128,6 +129,10 @@ function genCoinTable(data: ICoinData[]) {
     );
 };
 
+function genCoinChart(id: string) {
+    return null;
+}
+
 export function Market() {
 
     const { isLoading, data } = useQuery<ICoinData[]>(
@@ -139,13 +144,18 @@ export function Market() {
     );
 
     return (
-        <Container>
-            { (!data || isLoading) ? (
-                <Loader>Loading...</Loader>
-            ) : (
-                genCoinTable(data.slice(0, 50))
-            ) }
-        </Container>
+        <BrowserRouter>
+            <Router>
+                <Route path=":coinId" />
+            </Router>
+            <Container>
+                { (!data || isLoading) ? (
+                    <Loader>Loading...</Loader>
+                ) : (
+                    genCoinTable(data.slice(0, 50))
+                ) }
+            </Container>
+        </BrowserRouter>
     );
 }
 

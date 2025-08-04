@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Components/Header';
-import { BrowserRouter as Router, Route, Routes, useMatch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from "./Routes/Home"; 
 import Market from './Routes/Market';
 import Wallet from "./Routes/Wallet";
