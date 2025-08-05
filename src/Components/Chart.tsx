@@ -6,48 +6,88 @@ import { Routes, Route, Link, useParams, Outlet } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 
 
+interface ShortLongData {
+    long: IMarketData;
+    short: IMarketData; 
+}
+
 const ChartDiv = styled.div`
     padding: "0 30px"; 
 `;
 
+function LongChart({ prices }: IMarketData) {
+    return (
+        <ApexChart 
+            type="line"
+            width={800}
+            height={500}
+            series={[
+                {
+                    name: "Prices", 
+                    data: prices.map((price) => ({
+                        x: price[0], 
+                        y: price[1]})),
+                }, 
+            ]}
+            options={{
+                theme: { mode: "light" }, 
+                chart: { type: "line" 
+                        , toolbar: {
+                            show: false, 
+                        }
+                        },
+                xaxis: { type: "datetime" 
 
-export function Chart({ prices } : IMarketData) {
+                },
+                yaxis: { labels: {
+                    formatter: (value: number) => `$${value.toFixed(2)}`
+                }},
+            stroke: { curve: "smooth" },
+            }}
+        />
+    );
+}; 
+
+
+function ShortChart( { prices }: IMarketData ) {
+    return (
+        <ApexChart 
+            width={800}
+            height={500}
+            series={[
+                {
+                    name: "Prices", 
+                    data: prices.map((price) => ({
+                        x: price[0], 
+                        y: price.slice(1,price.length)})),
+                }, 
+            ]}
+            options={{
+                theme: { mode: "light" }, 
+                chart: { type: "candlestick" 
+                        , toolbar: {
+                            show: false, 
+                        }
+                        },
+                xaxis: { type: "datetime" 
+
+                },
+                yaxis: { labels: {
+                    formatter: (value: number) => `$${value.toFixed(2)}`
+                }},
+            stroke: { curve: "smooth" },
+            }}
+        />
+    );
+}
+
+
+export function Chart({ long, short }: ShortLongData) {
 
     return (
         <ChartDiv>
-            <ApexChart 
-                type="line"
-                width={800}
-                height={800}
-                series={[
-                    {
-                        name: "Prices", 
-                        data: prices.map((price) => ({
-                            x: price[0], 
-                            y: price[1]})),
-                    }, 
-                ]}
-                options={{
-                    theme: { mode: "dark" }, 
-                    chart: { type: "line" 
-                            , height: 300 
-                            , width: 300
-                            , toolbar: {
-                                show: false, 
-                            }
-                            },
-                    xaxis: { type: "datetime" },
-                    yaxis: { labels: {
-                        formatter: (value: number) => `$${value.toFixed(2)}`
-                    }},
-                    stroke: { curve: "smooth" },
-                    tooltip: {
-                        y: {
-                            formatter: (value: number) => `$${value.toFixed(2)}`
-                        }
-                    }}
-                }
-            />
+            <LongChart prices={long.prices} />
+            <ShortChart prices={short.prices} />
         </ChartDiv>
     ); 
 }

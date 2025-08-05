@@ -38,6 +38,15 @@ export interface IMarketData {
     prices: Array<Array<number>[]>[]; 
 }; 
 
+async function getUrl<T>(url: string): Promise<T> {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`);
+    }
+    const data: T = await response.json();
+    return data;
+}
+
 export async function fetchCoinHistory(coinId: string): Promise<IMarketData> {
     async function getUrl() {
         const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=90`;
@@ -46,6 +55,12 @@ export async function fetchCoinHistory(coinId: string): Promise<IMarketData> {
         return data 
     }
     const res = await getUrl(); 
+    return res; 
+}
+
+export async function fetchCoinCandle(coinId: string): Promise<IMarketData> {
+    const url = `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?vs_currency=usd&days=1`; 
+    const res: IMarketData = await getUrl(url); 
     return res; 
 }
 

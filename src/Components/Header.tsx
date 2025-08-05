@@ -77,7 +77,6 @@ function Header() {
                 <Item><StyledLink to="/market">{ marketMatch ? <Bold>Market</Bold> : "Market" }</StyledLink></Item>
                 <Item><StyledLink to="/wallet">{ walletMatch ? <Bold>Wallet</Bold> : "Wallet" }</StyledLink></Item>
                 <Item><StyledLink to="/history">{ histMatch ? <Bold>History</Bold> : "History" }</StyledLink></Item>
-                <Item><StyledLink to="/support">{ supportMatch ? <Bold>Support</Bold> : "Support" }</StyledLink></Item>
             </Items>
 
             <Items>

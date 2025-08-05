@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
+import { fetchCoins, fetchCoinHistory, IMarketData, fetchCoinCandle  } from "../api";
 import { styled } from "styled-components"; 
 import { Outlet
     , useNavigate
@@ -10,6 +10,7 @@ import { Outlet
 } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
+import Login from "./Login";
 
 
 export function MarketIndexRedirect() {
@@ -151,24 +152,33 @@ export function CoinChart() {
     // because useParam can understand based on information which is defined in router with colon. 
 
     const { coinId } = useParams<{coinId : string}>(); 
-    // console.log(`coinID -> ${coinId}`)
-    const [data, setData] = useState<IMarketData | null>(null); 
+    const [data, setData] = useState<IMarketData | null>(null); // long data.  
+    const [shortData, setShortData ] = useState<IMarketData | null>(null); 
 
     useEffect(() => {
         // initializing. 
         if (!coinId) return; 
 
-        fetchCoinHistory(coinId).then((result) => {
-            setData(result); 
-        }).catch((err) => {
-            setData(null); 
-            console.error("Error fetching coin data", err); 
-        }); 
-    }, [coinId]); 
-    
-    if (!data) return <div>Loading Chart...</div>
+        const timeoutId = setTimeout(() => {
+            Promise.all([
+                fetchCoinHistory(coinId),
+                fetchCoinCandle(coinId)
+            ]).then(([long, short]) => {
+                setData(long); 
+                setShortData(short); 
+            }).catch((err) =>{
+                setData(null); 
+                setShortData(null); 
+                console.error("Error fetching coin data", err); 
+            })
+        }, 1000);
 
-    return <Chart prices={data.prices} />;
+        return () => clearTimeout(timeoutId); 
+    }, [coinId]);   
+
+    if (!data || !shortData) return <div>Loading Chart...</div>
+
+    return <Chart long={data} short={shortData}/>;
 }
 
 export function Market() {
