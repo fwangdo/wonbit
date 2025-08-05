@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
-import { Link, useMatch } from 'react-router-dom'; 
+import { Link, useMatch, useLocation } from 'react-router-dom'; 
 import wonbit from '../Assets/wonbit.jpeg'; 
 
 interface IChildren {
@@ -61,10 +61,12 @@ export const Img = styled.img`
 
 function Header() {
     const homeMatch = useMatch('/'); 
-    const marketMatch = useMatch('/market'); 
+    // const marketMatch = useMatch('/market'); 
     const walletMatch = useMatch('/wallet'); 
     const histMatch = useMatch('/history');  
     const supportMatch = useMatch('/support'); 
+
+    const marketMatch = useLocation().pathname.startsWith("/market");  
 
     return (
         <>
