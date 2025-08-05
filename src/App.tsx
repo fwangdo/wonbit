@@ -25,7 +25,7 @@ function Main() {
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/market" element={<Market />}>
-              {/* <Route index element={<MarketIndexRedirect />} /> */}
+              <Route index element={<MarketIndexRedirect />} />
               <Route path=":coinId" element={<CoinChart />} />
             </Route>
             <Route path="/wallet" element={<Wallet/>}/>

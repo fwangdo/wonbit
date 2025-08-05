@@ -2,7 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
 import { styled } from "styled-components"; 
-import { Routes, Route, Link, useParams, Outlet, useNavigate, NavigateFunction } from "react-router-dom";
+import { Outlet
+    , useNavigate
+    , useParams 
+    , useLocation
+    , NavigateFunction 
+} from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
 
@@ -21,22 +26,6 @@ export function MarketIndexRedirect() {
   }, [isLoading, data, navigate]);
 
   return <div>Loading...</div>;
-}
-
-
-interface IHistorical {
-  time_open: string;
-  time_close: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-  market_cap: number;
-}
-
-interface ChartProps {
-  coinId: string;
 }
 
 const Container = styled.div`
@@ -137,8 +126,10 @@ function GenCoinTable(data: ICoinData[]
                     <Tr key={coin.symbol}>
                         <TdName>
                             <div 
-                            onClick={() => navigate(`/market/${coin.name}`, {
-                                state: { name: coin.name }
+                            onClick={() => navigate(`/market/${coin.id}`, {
+                                state: { 
+                                    id: coin.id,  
+                                }
                             })}
                             style={{cursor: 'pointer'}}
                             > 
@@ -156,8 +147,11 @@ function GenCoinTable(data: ICoinData[]
 
 
 export function CoinChart() {
-    // const { coinId } = useParams<{coinId: string}>(); 
-    const coinId = "bitcoin"; 
+    // we can take coinId from url  
+    // because useParam can understand based on information which is defined in router with colon. 
+
+    const { coinId } = useParams<{coinId : string}>(); 
+    console.log(`coinID -> ${coinId}`)
     const [data, setData] = useState<IMarketData | null>(null); 
 
     useEffect(() => {
@@ -186,6 +180,7 @@ export function Market() {
     );
 
     const navigate = useNavigate(); 
+    console.log(`data -> ${data}`)
 
     /* Requirements of react components are as follows: 
     1. return JSX
