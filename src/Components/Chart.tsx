@@ -17,6 +17,8 @@ export function Chart({ prices } : IMarketData) {
         <ChartDiv>
             <ApexChart 
                 type="line"
+                width={800}
+                height={800}
                 series={[
                     {
                         name: "Prices", 
@@ -26,21 +28,22 @@ export function Chart({ prices } : IMarketData) {
                     }, 
                 ]}
                 options={{
-                    theme: { mode: "light" }, 
+                    theme: { mode: "dark" }, 
                     chart: { type: "line" 
-                            , height: 500 
-                            , width: 500
-                    },
+                            , height: 300 
+                            , width: 300
+                            , toolbar: {
+                                show: false, 
+                            }
+                            },
                     xaxis: { type: "datetime" },
                     stroke: { curve: "smooth" },
-                }}
-                height={800}
-                width={900}
-                tooltip={{
-                    y: {
-                        formatter: (value: number) => `$${value.toFixed(2)}`
-                    }
-                }}
+                    tooltip: {
+                        y: {
+                            formatter: (value: number) => `$${value.toFixed(2)}`
+                        }
+                    }}
+                }
             />
         </ChartDiv>
     ); 

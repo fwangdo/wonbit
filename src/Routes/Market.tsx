@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
 import { styled } from "styled-components"; 
-import { Routes, Route, Link, useParams, Outlet, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useParams, Outlet, useNavigate, NavigateFunction } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
 
@@ -119,7 +119,10 @@ interface ICoinData {
     symbol: string; 
 }; 
 
-function genCoinTable(data: ICoinData[]) {
+function GenCoinTable(data: ICoinData[]
+                    , navigate: NavigateFunction
+                    ) {
+    
     return (
         <CoinTable>
             <Thead>
@@ -132,7 +135,16 @@ function genCoinTable(data: ICoinData[]) {
             <tbody>
                 {data.map((coin) =>(
                     <Tr key={coin.symbol}>
-                        <TdName>{coin.symbol}</TdName>
+                        <TdName>
+                            <div 
+                            onClick={() => navigate(`/market/${coin.name}`, {
+                                state: { name: coin.name }
+                            })}
+                            style={{cursor: 'pointer'}}
+                            > 
+                                {coin.symbol}
+                            </div>
+                        </TdName>
                         <TdElem>{coin.current_price}</TdElem>
                         <TdElem>{coin.price_change_percentage_24h}</TdElem>
                     </Tr>
@@ -173,6 +185,8 @@ export function Market() {
         }
     );
 
+    const navigate = useNavigate(); 
+
     /* Requirements of react components are as follows: 
     1. return JSX
     2. start with upper case. 
@@ -188,7 +202,7 @@ export function Market() {
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
                 ) : (
-                    genCoinTable(data.slice(0, 50))
+                    GenCoinTable(data.slice(0, 50), navigate)
                 ) }
             </TableWrapper>
         </Container>
