@@ -155,11 +155,13 @@ export function CoinChart() {
     const [data, setData] = useState<IMarketData | null>(null); 
 
     useEffect(() => {
+        // initializing. 
         if (!coinId) return; 
 
         fetchCoinHistory(coinId).then((result) => {
             setData(result); 
         }).catch((err) => {
+            setData(null); 
             console.error("Error fetching coin data", err); 
         }); 
     }, [coinId]); 
