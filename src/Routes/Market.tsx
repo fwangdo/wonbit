@@ -2,9 +2,26 @@ import { useQuery } from "@tanstack/react-query";
 import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
 import { styled } from "styled-components"; 
-import { Routes, Route, Link, useParams, Outlet } from "react-router-dom";
+import { Routes, Route, Link, useParams, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
+
+
+export function MarketIndexRedirect() {
+  const navigate = useNavigate();
+  const { data, isLoading } = useQuery({
+    queryKey: ["allCoins"],
+    queryFn: fetchCoins,
+  });
+
+  useEffect(() => {
+    if (!isLoading && data && data.length > 0) {
+      navigate(`/market/${data[0].id}`, { replace: true });
+    }
+  }, [isLoading, data, navigate]);
+
+  return <div>Loading...</div>;
+}
 
 
 interface IHistorical {
@@ -28,11 +45,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-
-// chart part
-// const Chart = styled.div`
-//     background-color: #000;
-// `
 
 // loader.
 const Loader = styled.span`
@@ -84,6 +96,16 @@ const Td = styled.td`
 
 const Tr = styled.tr`
 `
+
+const TableWrapper = styled.div`
+  flex: 1;
+`;
+
+const ChartWrapper = styled.div`
+  flex: 1;
+  margin-right: 20px;
+`;
+
 
 interface ICoinData {
     current_price: number; 
@@ -137,9 +159,8 @@ export function CoinChart() {
     }, [coinId]); 
     
     if (!data) return <div>Loading Chart...</div>
-    // const res = drawChart(data); 
 
-    return Chart(data);
+    return <Chart prices={data.prices} />;
 }
 
 export function Market() {
@@ -160,12 +181,16 @@ export function Market() {
 
     return (
         <Container>
-            <Outlet />
-            { (!data || isLoading) ? (
-                <Loader>Loading...</Loader>
-            ) : (
-                genCoinTable(data.slice(0, 50))
-            ) }
+            <ChartWrapper>
+                <Outlet />
+            </ChartWrapper>
+            <TableWrapper>
+                { (!data || isLoading) ? (
+                    <Loader>Loading...</Loader>
+                ) : (
+                    genCoinTable(data.slice(0, 50))
+                ) }
+            </TableWrapper>
         </Container>
     );
 }

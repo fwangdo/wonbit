@@ -7,9 +7,11 @@ import { useEffect, useState } from 'react';
 
 
 const ChartDiv = styled.div`
+    padding: "0 30px"; 
 `;
 
-export function Chart({ prices }: IMarketData) {
+
+export function Chart({ prices } : IMarketData) {
 
     return (
         <ChartDiv>
@@ -32,8 +34,13 @@ export function Chart({ prices }: IMarketData) {
                     xaxis: { type: "datetime" },
                     stroke: { curve: "smooth" },
                 }}
-                height={400}
+                height={800}
                 width={900}
+                tooltip={{
+                    y: {
+                        formatter: (value: number) => `$${value.toFixed(2)}`
+                    }
+                }}
             />
         </ChartDiv>
     ); 
