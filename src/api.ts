@@ -40,7 +40,7 @@ export interface IMarketData {
 
 export async function fetchCoinHistory(coinId: string): Promise<IMarketData> {
     async function getUrl() {
-        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=14&interval=daily`;
+        const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=90`;
         const response = await fetch(url, options); 
         const data: IMarketData = await response.json(); 
         return data 

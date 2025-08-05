@@ -151,7 +151,7 @@ export function CoinChart() {
     // because useParam can understand based on information which is defined in router with colon. 
 
     const { coinId } = useParams<{coinId : string}>(); 
-    console.log(`coinID -> ${coinId}`)
+    // console.log(`coinID -> ${coinId}`)
     const [data, setData] = useState<IMarketData | null>(null); 
 
     useEffect(() => {

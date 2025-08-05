@@ -37,6 +37,9 @@ export function Chart({ prices } : IMarketData) {
                             }
                             },
                     xaxis: { type: "datetime" },
+                    yaxis: { labels: {
+                        formatter: (value: number) => `$${value.toFixed(2)}`
+                    }},
                     stroke: { curve: "smooth" },
                     tooltip: {
                         y: {
