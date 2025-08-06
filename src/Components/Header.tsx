@@ -5,9 +5,6 @@ import wonbit from '../Assets/wonbit.jpeg';
 import { useRecoilState } from "recoil"; 
 import { isLoginState } from '../atoms/Atom'; 
 
-interface IChildren {
-    children: string 
-}
 
 const Col = styled.div`
     display: flex;

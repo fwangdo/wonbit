@@ -1,4 +1,5 @@
-export const USERS = "users"
+export const USERS = "users";
+export const WALLET = "wallet";
 
 export interface IUser {
     id: string;

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react"; 
 import styled from "styled-components";
 import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
-import { USERS, IUser } from "../Components/Data"; 
+import { USERS
+        , IUser
+        , WALLET
+        , IWallet
+        } from "../Components/Data"; 
 import { useSetRecoilState } from "recoil";
 
 
@@ -59,6 +63,10 @@ function Enroll() {
         const existing = localStorage.getItem(USERS); 
         let users: IUser[] = existing ? JSON.parse(existing) : [];
 
+        // 3.1 Get exisitng 
+        const existingWallet = localStorage.getItem(WALLET);  
+        let wallets: IWallet[] = existingWallet ? JSON.parse(existingWallet) : []; 
+
         // 4. Check redundant account. 
         if (users.some((user) => user.id === id)) {
             alert(`The id exists.`); 
@@ -67,8 +75,13 @@ function Enroll() {
 
         // 5. Add new account. 
         const newUser = { id, pwd, name, loc };
+        const newWallet: IWallet = { "id": id, "usd": 0, coins: {} };
+
         users.push(newUser); 
+        wallets.push(newWallet); 
+
         localStorage.setItem(USERS, JSON.stringify(users)); 
+        localStorage.setItem(WALLET, JSON.stringify(wallets)); 
 
         alert("New account is created.")
         reinitState();  
