@@ -210,7 +210,7 @@ export function Market() {
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
                 ) : (
-                    GenCoinTable(data.slice(0, 50), navigate)
+                    GenCoinTable(data.slice(0, 30), navigate)
                 ) }
             </TableWrapper>
         </Container>

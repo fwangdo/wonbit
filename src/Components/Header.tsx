@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Link, useMatch, useLocation } from 'react-router-dom'; 
 import wonbit from '../Assets/wonbit.jpeg'; 
+import { useRecoilState } from "recoil"; 
+import { isLoginState } from '../atoms/Atom'; 
 
 interface IChildren {
     children: string 
@@ -70,6 +72,13 @@ function Header() {
     const loginMatch = useMatch('/login')
     const enrollMatch = useMatch('/enroll')
 
+    // recoil state
+    const [isLogin, setIsLogin] = useRecoilState(isLoginState); 
+
+    const execLogout = () => {
+        setIsLogin(false); 
+    };
+
     return (
         <>
         <Col>
@@ -82,7 +91,12 @@ function Header() {
             </Items>
 
             <Items>
-                <Item><StyledLink to="/login">{ loginMatch ? <Bold>Login</Bold> : "Login" }</StyledLink></Item>
+                { isLogin ? (
+                    <Item onClick={execLogout}>Logout</Item>
+                ): (
+                    <Item><StyledLink to="/login">{ loginMatch ? <Bold>Login</Bold> : "Login" }</StyledLink></Item>
+                )
+                } 
                 <Item><StyledLink to="/enroll">{ enrollMatch ? <Bold>Enroll</Bold> : "Enroll" }</StyledLink></Item>
             </Items>
         </Col>
