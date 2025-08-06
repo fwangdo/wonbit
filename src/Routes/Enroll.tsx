@@ -6,8 +6,6 @@ import { USERS
         , WALLET
         , IWallet
         } from "../Components/Data"; 
-import { useSetRecoilState } from "recoil";
-
 
 
 function Enroll() {
@@ -39,8 +37,8 @@ function Enroll() {
         setName(""); 
         setLoc(""); 
     };
-    
-    const handleRegister = () => {
+
+    const handleError = () => {
         // 1. check length. 
         if (
             id.length < 2 ||
@@ -72,8 +70,15 @@ function Enroll() {
             alert(`The id exists.`); 
             return; 
         }
+        
+        return { users, wallets };
+    }
+    
+    const handleRegister = () => {
+        const storages = handleError();  
+        if (!storages) return;  
+        const { users, wallets } = storages; 
 
-        // 5. Add new account. 
         const newUser = { id, pwd, name, loc };
         const newWallet: IWallet = { "id": id, "usd": 0, coins: {} };
 
