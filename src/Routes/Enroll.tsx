@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react"; 
 import styled from "styled-components";
 import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
+import { USERS, IUser } from "../Components/Data"; 
+import { useSetRecoilState } from "recoil";
+
+
 
 function Enroll() {
 
-    const [ Id, setId ] = useState(""); 
-    const [ Pwd, setPwd ] = useState(""); 
-    const [ Pwd2, setPwd2 ] = useState(""); 
-    const [ Name, setName ] = useState(""); 
-    const [ Loc, setLoc ] = useState(""); 
-
-    const [ done, setDone ] = useState(false); 
+    const [ id, setId ] = useState(""); 
+    const [ pwd, setPwd ] = useState(""); 
+    const [ pwd2, setPwd2 ] = useState(""); 
+    const [ name, setName ] = useState(""); 
+    const [ loc, setLoc ] = useState(""); 
 
     function genCatchFunc(elem: React.Dispatch<React.SetStateAction<string>>) {
         function catchFunc(e: React.ChangeEvent<HTMLInputElement>) { 
@@ -26,15 +28,61 @@ function Enroll() {
     const changeName = genCatchFunc(setName); 
     const changeLoc = genCatchFunc(setLoc); 
 
+    const reinitState = () => {
+        setId("");
+        setPwd(""); 
+        setPwd2(""); 
+        setName(""); 
+        setLoc(""); 
+    };
+    
+    const handleRegister = () => {
+        // 1. check length. 
+        if (
+            id.length < 2 ||
+            pwd.length < 2 ||
+            pwd2.length < 2 ||
+            name.length < 2 ||
+            loc.length < 2 
+        ) {
+            alert(`All inputs should be more than eqaul to 2 letters.`); 
+            return; 
+        }
+
+        // 2. check password equivalence. 
+        if ( pwd !== pwd2 ) {
+            alert(`Password is not equivalent. Check password. `); 
+            return; 
+        }
+
+        // 3. Get existing info from localStorage
+        const existing = localStorage.getItem(USERS); 
+        let users: IUser[] = existing ? JSON.parse(existing) : [];
+
+        // 4. Check redundant account. 
+        if (users.some((user) => user.id === id)) {
+            alert(`The id exists.`); 
+            return; 
+        }
+
+        // 5. Add new account. 
+        const newUser = { id, pwd, name, loc };
+        users.push(newUser); 
+        localStorage.setItem(USERS, JSON.stringify(users)); 
+
+        alert("New account is created.")
+        reinitState();  
+    }; 
+
     return (
         <Col> 
             Register
-            <StyledInput placeholder="Id" /> 
-            <StyledInput placeholder="Password" /> 
-            <StyledInput placeholder="Password Check" /> 
-            <StyledInput placeholder="Name" /> 
-            <StyledInput placeholder="Location" /> 
-            <StyledBtn>Done</StyledBtn>
+            <StyledInput placeholder="Id" value={id} onChange={changeId } /> 
+            <StyledInput placeholder="Password" value={pwd} onChange={changePwd } /> 
+            <StyledInput placeholder="Password Check" value={pwd2} onChange={changePwd2 } /> 
+            <StyledInput placeholder="Name" value={name} onChange={ changeName } /> 
+            <StyledInput placeholder="Location" value={loc} onChange={changeLoc } /> 
+            <StyledBtn onClick={handleRegister} >Done</StyledBtn>
         </Col>
     ); 
 }
