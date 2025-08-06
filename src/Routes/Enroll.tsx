@@ -80,7 +80,7 @@ function Enroll() {
         const { users, wallets } = storages; 
 
         const newUser = { id, pwd, name, loc };
-        const newWallet: IWallet = { "id": id, "usd": 0, coins: {} };
+        const newWallet: IWallet = { "id": id, "usd": 10000, coins: {} }; // basically we will gvie 10000$. 
 
         users.push(newUser); 
         wallets.push(newWallet); 

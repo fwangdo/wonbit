@@ -12,6 +12,9 @@ import { Outlet
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
 import Login from "./Login";
+import { useRecoilValue } from "recoil"; 
+import { isLoginState } from "../atoms/Atom";  
+import { TradePanel } from "../Components/TradeTable"; 
 
 
 export function MarketIndexRedirect() {
@@ -96,6 +99,10 @@ const ChartWrapper = styled.div`
   flex: 1;
   margin-right: 20px;
 `;
+
+const TradeWrapper = styled.div`
+    flex: 1; 
+`
 
 
 interface ICoinData {
@@ -182,6 +189,16 @@ export function CoinChart() {
     return <Chart long={data} short={shortData}/>;
 }
 
+export function TradeTable() {
+    const isLogin = useRecoilValue(isLoginState);  
+
+    return (
+        isLogin ? ( 
+            <TradePanel />
+         ) : null 
+    ); 
+}
+
 export function Market() {
 
     const { isLoading, data } = useQuery<ICoinData[]>(
@@ -205,6 +222,7 @@ export function Market() {
         <Container>
             <ChartWrapper>
                 <Outlet />
+                <TradeTable />
             </ChartWrapper>
             <TableWrapper>
                 { (!data || isLoading) ? (
