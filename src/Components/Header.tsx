@@ -63,10 +63,12 @@ function Header() {
     const homeMatch = useMatch('/'); 
     // const marketMatch = useMatch('/market'); 
     const walletMatch = useMatch('/wallet'); 
-    const histMatch = useMatch('/history');  
-    const supportMatch = useMatch('/support'); 
-
     const marketMatch = useLocation().pathname.startsWith("/market");  
+    const histMatch = useMatch('/history');  
+
+    // login and enroll. 
+    const loginMatch = useMatch('/login')
+    const enrollMatch = useMatch('/enroll')
 
     return (
         <>
@@ -80,8 +82,8 @@ function Header() {
             </Items>
 
             <Items>
-                <Item>Login</Item>
-                <Item>Enroll</Item>
+                <Item><StyledLink to="/login">{ loginMatch ? <Bold>Login</Bold> : "Login" }</StyledLink></Item>
+                <Item><StyledLink to="/enroll">{ enrollMatch ? <Bold>Enroll</Bold> : "Enroll" }</StyledLink></Item>
             </Items>
         </Col>
         </>
