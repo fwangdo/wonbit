@@ -3,12 +3,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
 import { USERS, IUser } from "../Components/Data"; 
+import { isLoginState } from "../atoms/Atom"; 
+import {
+    useRecoilState
+} from "recoil"; 
 
 
 function Login() {
 
     const [id, setId] = useState(""); 
     const [pwd, setPwd ]  = useState(""); 
+
+    const [isLogin, setIsLogin] = useRecoilState(isLoginState); 
     const navigate = useNavigate(); 
 
     function genCatchFunc(elem: React.Dispatch<React.SetStateAction<string>>) {
@@ -30,14 +36,8 @@ function Login() {
     const handleLogin = () => {
         const existing = localStorage.getItem(USERS); 
         let users = existing ? JSON.parse(existing) : []; 
-        
-        // checking.
-        // if (users.filter((user: IUser) => user.id === id && user.pwd === pwd).length === 0) {
-        //     alert("There is no account.")
-        //     return; 
-        // }
 
-        // better way. 
+        // some => boolean. 
         const found = users.some((user: IUser) => user.id === id && user.pwd === pwd); 
         if (!found) {
             alert("There is no account.");
@@ -45,6 +45,7 @@ function Login() {
         }
 
         // TODO: change status 
+        setIsLogin(true);
 
         // initializing. 
         reinitState(); 
@@ -52,10 +53,17 @@ function Login() {
     
     return (
         <Col>
-            Log in
-            <StyledInput value={id} onChange={changeId} placeholder="Email" marginTop="80px" />
-            <StyledInput value={pwd} onChange={changePwd} placeholder="Password" marginTop="5px"/>
-            <StyledBtn onClick={handleLogin}>Login</StyledBtn>
+            {   isLogin ? (
+                <div>Done</div>
+                ) : (
+                <>
+                Log in
+                <StyledInput value={id} onChange={changeId} placeholder="Id" marginTop="80px" />
+                <StyledInput value={pwd} onChange={changePwd} placeholder="Password" marginTop="5px"/>
+                <StyledBtn onClick={handleLogin}>Login</StyledBtn>
+                </>
+                )
+            }
         </Col>
     ); 
 }
