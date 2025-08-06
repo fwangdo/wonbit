@@ -20,7 +20,7 @@ function LongChart({ prices }: IMarketData) {
         <ApexChart 
             type="line"
             width={800}
-            height={500}
+            height={300}
             series={[
                 {
                     name: "Prices", 
@@ -49,35 +49,40 @@ function LongChart({ prices }: IMarketData) {
 }; 
 
 
-function ShortChart( { prices } : { prices: ICandleData } ) {
-    // console.log(`short prices -> ${prices}`)
-
+function ShortChart({ prices }: { prices: ICandleData }) {
     return (
         <ApexChart 
+            type="candlestick"
             width={800}
-            height={500}
+            height={300}
             series={[
                 {
-                    name: "Prices", 
+                    name: "Short-term candle prices", 
                     data: prices.map((price) => ({
                         x: price[0], 
-                        y: price.slice(1,price.length)})),
+                        y: [price[1], price[2], price[3], price[4]]
+                    })),
                 }, 
             ]}
             options={{
                 theme: { mode: "light" }, 
-                chart: { type: "candlestick" 
-                        , toolbar: {
-                            show: false, 
-                        }
-                        },
-                xaxis: { type: "datetime" 
-
+                chart: { 
+                    type: "candlestick",
+                    toolbar: {
+                        show: false, 
+                    }
                 },
-                yaxis: { labels: {
-                    formatter: (value: number) => `$${value.toFixed(2)}`
-                }},
-            stroke: { curve: "smooth" },
+                xaxis: { 
+                    type: "datetime" 
+                },
+                yaxis: { 
+                    labels: {
+                        formatter: (value: number) => `$${value.toFixed(2)}`
+                    }
+                },
+                tooltip: { 
+                    enabled: true
+                }
             }}
         />
     );
