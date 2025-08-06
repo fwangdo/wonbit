@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useState, useEffect } from 'react'; 
+import { useNavigate } from "react-router-dom";
 
 const Col = styled.div`
     display: flex;
@@ -25,21 +27,41 @@ interface StyledInputProps {
     marginTop?: string;
 }
 
-const StyledInput = styled.input<StyledInputProps>`
+const StyledInput = styled.input.withConfig({
+    shouldForwardProp: (prop) => prop !== "marginTop" // do not forward to html. 
+})<StyledInputProps>`
     width: 500px;   // 가로 크기 조절
     height: 40px;   // 세로 크기 조절
     padding: 8px; 
     font-size: 16px;
     margin-top: ${(props) => props.marginTop || "20px" };
+    border-radius: 10px;
+    border-width: 1px;
 `
 
 function Login() {
+
+    const [id, setId] = useState(""); 
+    const [pwd, setPwd ]  = useState(""); 
+    const navigate = useNavigate(); 
+
+    function genCatchFunc(elem: React.Dispatch<React.SetStateAction<string>>) {
+        function catchFunc(e: React.ChangeEvent<HTMLInputElement>) { 
+            e.preventDefault(); 
+            elem(e.target.value); 
+        };
+        return catchFunc; 
+    }
+
+    const changeId = genCatchFunc(setId);
+    const changePwd = genCatchFunc(setPwd); 
+    
     return (
         <Col>
             Log in
-            <StyledInput placeholder="Email" marginTop="80px"/>
-            <StyledInput placeholder="Password" marginTop="5px"/>
-            <button style={{ marginTop: "30px", ...InputStyle }}>Login</button>
+            <StyledInput onChange={changeId} placeholder="Email" marginTop="80px" />
+            <StyledInput onChange={changePwd} placeholder="Password" marginTop="5px"/>
+            <button style={{ marginTop: "30px", ...InputStyle }} onClick={() => navigate("/")}>Login</button>
         </Col>
     ); 
 }
