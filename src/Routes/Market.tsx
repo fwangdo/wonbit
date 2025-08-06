@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory, IMarketData, fetchCoinCandle  } from "../api";
+import { fetchCoins, fetchCoinHistory, fetchCoinCandle  } from "../api";
+import type { IMarketData, ICandleData } from "../api";
 import { styled } from "styled-components"; 
 import { Outlet
     , useNavigate
@@ -153,7 +154,7 @@ export function CoinChart() {
 
     const { coinId } = useParams<{coinId : string}>(); 
     const [data, setData] = useState<IMarketData | null>(null); // long data.  
-    const [shortData, setShortData ] = useState<IMarketData | null>(null); 
+    const [shortData, setShortData ] = useState<ICandleData | null>(null); 
 
     useEffect(() => {
         // initializing. 

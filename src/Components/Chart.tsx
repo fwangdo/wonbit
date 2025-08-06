@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory, IMarketData  } from "../api";
+import { fetchCoins, fetchCoinHistory, IMarketData, ICandleData } from "../api";
 import { styled } from "styled-components"; 
 import { Routes, Route, Link, useParams, Outlet } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 interface ShortLongData {
     long: IMarketData;
-    short: IMarketData; 
+    short: ICandleData; 
 }
 
 const ChartDiv = styled.div`
@@ -49,7 +49,9 @@ function LongChart({ prices }: IMarketData) {
 }; 
 
 
-function ShortChart( { prices }: IMarketData ) {
+function ShortChart( { prices } : { prices: ICandleData } ) {
+    // console.log(`short prices -> ${prices}`)
+
     return (
         <ApexChart 
             width={800}
@@ -83,11 +85,12 @@ function ShortChart( { prices }: IMarketData ) {
 
 
 export function Chart({ long, short }: ShortLongData) {
+    console.log(short)
 
     return (
         <ChartDiv>
             <LongChart prices={long.prices} />
-            <ShortChart prices={short.prices} />
+            <ShortChart prices={short} />
         </ChartDiv>
     ); 
 }
