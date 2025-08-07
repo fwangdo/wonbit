@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { fetchCurPrice } from "../api"; 
+import { useQuery } from "@tanstack/react-query"; 
+import { DefaultDeserializer } from "v8";
+
 
 const Container = styled.div`
   width: 800px;
@@ -89,12 +94,69 @@ const AuthBtn = styled.button`
   }
 `;
 
-export function TradePanel() {
-  const [activeTab, setActiveTab] = useState("buy");
-  const [price, setPrice] = useState(160683000);
-  const [amount, setAmount] = useState(0);
 
-  const total = price * amount;
+export function TradePanel() {
+    // hook should be on the top always!
+    const { coinId } = useParams<{coinId : string}>(); 
+    const [activeTab, setActiveTab] = useState("buy");
+    
+    const { data: curPriceData, isLoading: isCurPriceLoading, error: curPriceError } = useQuery({ 
+        queryKey: [ 'curPrice', coinId ],
+        queryFn: () => {
+            // handling nullabe case. 
+            if (!coinId) {
+                throw new Error('coinId is required'); 
+            }
+            return fetchCurPrice(coinId)
+        },  
+        enabled: !!coinId
+    }); 
+    
+    const [price, setPrice] = useState(0);
+    const [amount, setAmount] = useState(0);
+    // if you use setPrice directly, it would cause re-rendering, then it leads infinite recursion. 
+    useEffect(() => {
+        if (curPriceData) {
+            const curPrice = curPriceData.market_data.current_price.usd;
+            setPrice(curPrice);
+        }
+    }, [curPriceData]);
+
+    if (!coinId) return <div>Fail</div>; 
+    if (isCurPriceLoading) return <div>Loading..</div>;
+    if (curPriceError || (!curPriceData)) return <div>Fail</div>;
+
+    const curPrice = curPriceData.market_data.current_price.usd
+    const total = price * amount;
+
+
+    const TradeForBuy = () => { 
+        return (
+            <Form>
+            <Row>
+                <Label>매수가격 (USD)</Label>
+                <Input type="number" value={price} />
+            </Row>
+
+            <Row>
+                <Label>주문수량 (BTC)</Label>
+                <Input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
+            </Row>
+
+            <PercentButtons>
+                {[10, 25, 50, 100].map((percent) => (
+                <PercentBtn key={percent} onClick={() => setAmount((percent / 100) * 1)}>{percent}%</PercentBtn>
+                ))}
+                <PercentBtn>직접입력</PercentBtn>
+            </PercentButtons>
+
+            <Row>
+                <Label>주문총액 (USD)</Label>
+                <div>{total.toLocaleString()} USD</div>
+            </Row>
+            </Form>
+        );
+    }
 
   return (
     <Container>
@@ -106,34 +168,7 @@ export function TradePanel() {
       </TabMenu>
 
       {(activeTab === "buy" && (
-        <Form>
-          <Row>
-            <Label>매수가격 (KRW)</Label>
-            <Input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} />
-          </Row>
-
-          <Row>
-            <Label>주문수량 (BTC)</Label>
-            <Input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
-          </Row>
-
-          <PercentButtons>
-            {[10, 25, 50, 100].map((percent) => (
-              <PercentBtn key={percent} onClick={() => setAmount((percent / 100) * 1)}>{percent}%</PercentBtn>
-            ))}
-            <PercentBtn>직접입력</PercentBtn>
-          </PercentButtons>
-
-          <Row>
-            <Label>주문총액 (KRW)</Label>
-            <div>{total.toLocaleString()} KRW</div>
-          </Row>
-
-          {/* <AuthButtons>
-            <AuthBtn>회원가입</AuthBtn>
-            <AuthBtn>로그인</AuthBtn>
-          </AuthButtons> */}
-        </Form>
+        <TradeForBuy />
       )) || (
         activeTab === "sell" && (
             null    

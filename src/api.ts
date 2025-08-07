@@ -15,25 +15,6 @@ export async function fetchCoinTickers(coinId: string) {
 }
 
 
-// history data. 
-function getHistRange(): string[] {
-    const today = new Date(); 
-    const range = 14; 
-
-    const res = []; 
-    for (let i = range - 1; i >= 0; i--) {
-        const cur = new Date(today);     
-        cur.setDate(today.getDate() - i); 
-        const year = cur.getFullYear();
-        const month = String(cur.getMonth() + 1);
-        const day = String(cur.getDate()); 
-        const date = `${day}-${month}-${year}`; 
-        res.push(date); 
-    }
-
-    return res.reverse();
-}; 
-
 export interface IMarketData {
     prices: Array<Array<number>[]>[]; 
 }; 
@@ -66,12 +47,16 @@ export async function fetchCoinCandle(coinId: string): Promise<ICandleData> {
     return res; 
 }
 
-export async function fetchCoinDiff(coinId: string) {
-    const endDate = Math.floor(Date.now() / 1000); 
-    const history = 60 * 60 * 24; 
-    const startDate = endDate - history;  
-    return fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&symbols=btc'`
-        , options
-    ).then((response) => response.json())
+interface ICurPrice {
+    market_data: {
+        current_price: {
+            usd: number;
+        }
+    }
+}
+
+export async function fetchCurPrice(coinId: string): Promise<ICurPrice> {
+    const url = `https://api.coingecko.com/api/v3/coins/${coinId}`;
+    const res: ICurPrice = await getUrl(url); 
+    return res; 
 }
