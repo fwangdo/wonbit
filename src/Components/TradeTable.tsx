@@ -14,6 +14,7 @@ import { USERS
     , TransType
     , BUY, SELL 
  } from "./Data";
+import { readFileSync } from "node:fs";
 
 
 const Container = styled.div`
@@ -105,8 +106,37 @@ const StyledBtn = styled.button`
 `;
 
 
-function changeData(type: TransType) {
-    const userId = useRecoilValue(userIdState); 
+function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
+    const curUsd = userWallet.usd;
+    if (curUsd < total) {
+        alert("you need to charge usd more. "); 
+        throw new Error(`current usd -> ${curUsd} but total number -> ${total}`);
+    }
+
+    userWallet.usd -= total; 
+    if (!(coinId in userWallet.coins)) {
+        userWallet.coins[coinId] = 0;
+    }
+
+    userWallet.coins[coinId] += amount; 
+    return userWallet; 
+}
+
+
+function reflectSellOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
+    const curCoin = userWallet.coins[coinId] ?? 0; 
+    if (curCoin < amount) {
+        alert("you need to charge usd more. "); 
+        throw new Error(`current usd -> ${curCoin} but total number -> ${total}`);
+    }
+
+    userWallet.coins[coinId] -= amount;
+    userWallet.usd += total; 
+    return userWallet; 
+}
+
+
+function changeData(userId: string, type: TransType, total: number, coinId: string, amount: number) {
     const tempWalletData = localStorage.getItem(WALLET);
     const tempHistData = localStorage.getItem(HIST);  
 
@@ -114,19 +144,44 @@ function changeData(type: TransType) {
         throw new Error(`walletData -> ${tempWalletData}, histData -> ${tempHistData}`)
     }
 
-    const walletData = JSON.parse(tempWalletData); 
-    const histData = JSON.parse(tempHistData); 
+    const walletData: IWallet[] = JSON.parse(tempWalletData); 
+    const histData: IHistory[] = JSON.parse(tempHistData); 
+
+    const userWallets = walletData.filter((data) => data.id === userId); 
+    const userHistories = walletData.filter((data) => data.id === userId );  
+
+    if (userWallets.length !== 1 || userHistories.length !== 1) {
+        alert(`there is another id or no id.`); 
+        throw new Error(`wallets -> ${userWallets}`) 
+    } 
+
+    const userWallet = userWallets[0]; 
+    const userHistory = userHistories[0]; 
     
     // wallet change
+    if (type === BUY) {
+        reflectBuyOnWallet(userWallet, total, coinId, amount); 
+    } else { // sell case. 
+        reflectSellOnWallet(userWallet, total, coinId, amount); 
+    }
 
     // hist change. 
+    if (type === BUY) {
 
-    return 
+    } else { // sell case. 
+
+    }
+
+    localStorage.setItem(WALLET, JSON.stringify(userWallets));
+    // TODO:/ 
+
+    return;  
 }; 
 
 
 export function TradePanel() {
     // hook should be on the top always!
+    const userId = useRecoilValue(userIdState); 
     const { coinId } = useParams<{coinId : string}>(); 
     const [activeTab, setActiveTab] = useState("buy");
     
@@ -154,6 +209,7 @@ export function TradePanel() {
 
     // hook done. 
 
+    if (!userId) return <div>Fail</div>;
     if (!coinId) return <div>Fail</div>; 
     if (isCurPriceLoading) return <div>Loading..</div>;
     if (curPriceError || (!curPriceData)) return <div>Fail</div>;
@@ -165,7 +221,7 @@ export function TradePanel() {
             <Form>
             <Row>
                 <Label>매수가격 (USD)</Label>
-                <Input value={price} />
+                <Input type="number" value={price} />
             </Row>
 
             <Row>
@@ -185,7 +241,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn>매수</StyledBtn>
+            <StyledBtn onClick={() => changeData(userId, BUY, total, coinId, amount)}>매수</StyledBtn>
             </Form>
         );
     }
@@ -196,7 +252,7 @@ export function TradePanel() {
             <Form>
             <Row>
                 <Label>매도가격 (USD)</Label>
-                <Input value={price} />
+                <Input type="number" value={price} />
             </Row>
 
             <Row>
@@ -209,7 +265,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn>매도</StyledBtn>
+            <StyledBtn onClick={() => changeData(userId, SELL, total, coinId, amount)}>매도</StyledBtn>
             </Form>
         );
     }

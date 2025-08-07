@@ -14,7 +14,9 @@ export interface IUser {
 export interface IWallet {
     id: string; 
     usd: number;
-    coins: Object; 
+    coins: {
+        [coin: string]: number;
+    } 
 }
 
 export type TransType = "buy" | "sell"; 
