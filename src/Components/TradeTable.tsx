@@ -135,13 +135,21 @@ function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, 
 function reflectSellOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
     const curCoin = userWallet.coins[coinId] ?? 0; 
     if (curCoin < amount) {
-        alert("you need to charge usd more. "); 
+        alert("you do not have enough coin."); 
         throw new Error(`current usd -> ${curCoin} but total number -> ${total}`);
     }
 
-    userWallet.coins[coinId] -= amount;
-    userWallet.usd += total; 
-    return userWallet; 
+    const newCoinAmount = curCoin - amount;
+    const newUsd = userWallet.usd + total; 
+
+    return {
+      id: userWallet.id
+      , usd: newUsd
+      , coins: {
+        ...userWallet.coins
+        , [coinId]: newCoinAmount
+      }
+    }
 }
 
 function reflectOnWallet(type: TransType, userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
