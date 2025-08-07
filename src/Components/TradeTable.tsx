@@ -106,6 +106,7 @@ const StyledBtn = styled.button`
 `;
 
 
+// wallet. 
 function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
     const curUsd = userWallet.usd;
     if (curUsd < total) {
@@ -135,8 +136,33 @@ function reflectSellOnWallet(userWallet: IWallet, total: number, coinId: string,
     return userWallet; 
 }
 
+// hist. TODO:  
+function reflectBuyOnHist(userHist: IHistory, total: number, coinId: string, amount: number, price: number): IHistory {
+    // we can posit that the trade that use made is possible. 
+    const curDate = Date.now(); 
+    const curTrans: ITrans= { 
+      date: curDate
+      , type: BUY
+      , coin: coinId 
+      , amount: amount
+      , price: price
+     }; 
+}
 
-function changeData(userId: string, type: TransType, total: number, coinId: string, amount: number) {
+function reflectSellOnHist(userWallet: IHistory, total: number, coinId: string, amount: number, price: number): IHistory {
+    const curCoin = userWallet.coins[coinId] ?? 0; 
+    if (curCoin < amount) {
+        alert("you need to charge usd more. "); 
+        throw new Error(`current usd -> ${curCoin} but total number -> ${total}`);
+    }
+
+    userWallet.coins[coinId] -= amount;
+    userWallet.usd += total; 
+    return userWallet; 
+}
+
+// change data. 
+function changeData(userId: string, type: TransType, total: number, coinId: string, amount: number, price: number) {
     const tempWalletData = localStorage.getItem(WALLET);
     const tempHistData = localStorage.getItem(HIST);  
 
@@ -160,9 +186,9 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
     
     // wallet change
     if (type === BUY) {
-        reflectBuyOnWallet(userWallet, total, coinId, amount); 
+        const newUserWallet = reflectBuyOnWallet(userWallet, total, coinId, amount); 
     } else { // sell case. 
-        reflectSellOnWallet(userWallet, total, coinId, amount); 
+        const newUserWallet = reflectSellOnWallet(userWallet, total, coinId, amount); 
     }
 
     // hist change. 
@@ -172,8 +198,8 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
 
     }
 
+    // TODO: changen new userWallet. 
     localStorage.setItem(WALLET, JSON.stringify(userWallets));
-    // TODO:/ 
 
     return;  
 }; 
@@ -241,7 +267,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn onClick={() => changeData(userId, BUY, total, coinId, amount)}>매수</StyledBtn>
+            <StyledBtn onClick={() => changeData(userId, BUY, total, coinId, amount, price)}>매수</StyledBtn>
             </Form>
         );
     }
@@ -265,7 +291,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn onClick={() => changeData(userId, SELL, total, coinId, amount)}>매도</StyledBtn>
+            <StyledBtn onClick={() => changeData(userId, SELL, total, coinId, amount, price)}>매도</StyledBtn>
             </Form>
         );
     }
