@@ -1,6 +1,8 @@
 export const USERS = "users";
 export const WALLET = "wallet";
 export const HIST = "history"; 
+export const BUY = "buy"; 
+export const SELL = "sell"; 
 
 export interface IUser {
     id: string;
@@ -15,11 +17,11 @@ export interface IWallet {
     coins: Object; 
 }
 
-type TransactionType = "buy" | "sell"; 
+export type TransType = "buy" | "sell"; 
 
 export interface ITrans {
     date: number;
-    type: TransactionType; 
+    type: TransType; 
     coin: string;
     amount: number; 
     price: number; 

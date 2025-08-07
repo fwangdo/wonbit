@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
 import { USERS, IUser } from "../Components/Data"; 
-import { isLoginState } from "../atoms/Atom"; 
+import { isLoginState, userIdState } from "../atoms/Atom"; 
 import {
     useRecoilState
 } from "recoil"; 
@@ -15,6 +15,7 @@ function Login() {
     const [pwd, setPwd ]  = useState(""); 
 
     const [isLogin, setIsLogin] = useRecoilState(isLoginState); 
+    const [userId, setUserId ] = useRecoilState(userIdState); 
     const navigate = useNavigate(); 
 
     function genCatchFunc(elem: React.Dispatch<React.SetStateAction<string>>) {
@@ -44,8 +45,9 @@ function Login() {
             return; 
         }
 
-        // TODO: change status 
+        // change status 
         setIsLogin(true);
+        setUserId(id); 
 
         // initializing. 
         reinitState(); 

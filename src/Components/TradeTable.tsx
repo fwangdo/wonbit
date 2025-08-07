@@ -3,7 +3,17 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { fetchCurPrice } from "../api"; 
 import { useQuery } from "@tanstack/react-query"; 
-import { DefaultDeserializer } from "v8";
+import { useRecoilValue } from "recoil"; 
+import { userIdState } from "../atoms/Atom";
+import { USERS
+    , WALLET
+    , HIST
+    , IWallet
+    , IHistory
+    , ITrans
+    , TransType
+    , BUY, SELL 
+ } from "./Data";
 
 
 const Container = styled.div`
@@ -80,7 +90,7 @@ const AuthButtons = styled.div`
   margin-top: 20px;
 `;
 
-const AuthBtn = styled.button`
+const StyledBtn = styled.button`
   flex: 1;
   padding: 10px;
   font-size: 16px;
@@ -93,6 +103,26 @@ const AuthBtn = styled.button`
     background-color: #0056b3;
   }
 `;
+
+
+function changeData(type: TransType) {
+    const userId = useRecoilValue(userIdState); 
+    const tempWalletData = localStorage.getItem(WALLET);
+    const tempHistData = localStorage.getItem(HIST);  
+
+    if (!tempWalletData || !tempHistData) {
+        throw new Error(`walletData -> ${tempWalletData}, histData -> ${tempHistData}`)
+    }
+
+    const walletData = JSON.parse(tempWalletData); 
+    const histData = JSON.parse(tempHistData); 
+    
+    // wallet change
+
+    // hist change. 
+
+    return 
+}; 
 
 
 export function TradePanel() {
@@ -122,20 +152,20 @@ export function TradePanel() {
         }
     }, [curPriceData]);
 
+    // hook done. 
+
     if (!coinId) return <div>Fail</div>; 
     if (isCurPriceLoading) return <div>Loading..</div>;
     if (curPriceError || (!curPriceData)) return <div>Fail</div>;
 
-    const curPrice = curPriceData.market_data.current_price.usd
     const total = price * amount;
-
 
     const TradeForBuy = () => { 
         return (
             <Form>
             <Row>
                 <Label>매수가격 (USD)</Label>
-                <Input type="number" value={price} />
+                <Input value={price} />
             </Row>
 
             <Row>
@@ -154,6 +184,32 @@ export function TradePanel() {
                 <Label>주문총액 (USD)</Label>
                 <div>{total.toLocaleString()} USD</div>
             </Row>
+
+            <StyledBtn>매수</StyledBtn>
+            </Form>
+        );
+    }
+
+
+    const TradeForSell = () => { 
+        return (
+            <Form>
+            <Row>
+                <Label>매도가격 (USD)</Label>
+                <Input value={price} />
+            </Row>
+
+            <Row>
+                <Label>매도수량 (BTC)</Label>
+                <Input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
+            </Row>
+
+            <Row>
+                <Label>주문총액 (USD)</Label>
+                <div>{total.toLocaleString()} USD</div>
+            </Row>
+
+            <StyledBtn>매도</StyledBtn>
             </Form>
         );
     }
@@ -163,15 +219,13 @@ export function TradePanel() {
       <TabMenu>
         <Tab active={activeTab === "buy"} onClick={() => setActiveTab("buy")}>매수</Tab>
         <Tab active={activeTab === "sell"} onClick={() => setActiveTab("sell")}>매도</Tab>
-        {/* <Tab active={activeTab === "simple"} onClick={() => setActiveTab("simple")}>간편주문</Tab>
-        <Tab active={activeTab === "history"} onClick={() => setActiveTab("history")}>거래내역</Tab> */}
       </TabMenu>
 
       {(activeTab === "buy" && (
         <TradeForBuy />
       )) || (
         activeTab === "sell" && (
-            null    
+        <TradeForSell />
         )
       )
       }
