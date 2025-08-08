@@ -295,6 +295,7 @@ export function TradePanel() {
     const handleChange = (type: TransType) => {
       changeData(userId, type, total, coinId, amount, price); 
       setAmount(0); 
+      alert(`주문이 완료되었습니다.`)
     }
 
     if (isCurPriceLoading) return <div>Loading..</div>;
@@ -327,7 +328,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn onClick={() => changeData(userId, BUY, total, coinId, amount, price)}>매수</StyledBtn>
+            <StyledBtn onClick={() => handleChange(BUY)}>매수</StyledBtn>
             </Form>
         );
     }
@@ -351,7 +352,7 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </Row>
 
-            <StyledBtn onClick={() => changeData(userId, SELL, total, coinId, amount, price)}>매도</StyledBtn>
+            <StyledBtn onClick={() => handleChange(SELL)}>매도</StyledBtn>
             </Form>
         );
     }
