@@ -5,6 +5,7 @@ import { USERS
         , IUser
         , WALLET
         , IWallet
+        , HIST, IHistory 
         } from "../Components/Data"; 
 
 
@@ -65,28 +66,34 @@ function Enroll() {
         const existingWallet = localStorage.getItem(WALLET);  
         let wallets: IWallet[] = existingWallet ? JSON.parse(existingWallet) : []; 
 
+        const existingHist = localStorage.getItem(HIST); 
+        let histories: IHistory[] = existingHist ? JSON.parse(existingHist) : [];  
+
         // 4. Check redundant account. 
         if (users.some((user) => user.id === id)) {
             alert(`The id exists.`); 
             return; 
         }
         
-        return { users, wallets };
+        return { users, wallets, histories };
     }
     
     const handleRegister = () => {
         const storages = handleError();  
         if (!storages) return;  
-        const { users, wallets } = storages; 
+        const { users, wallets, histories} = storages; 
 
         const newUser = { id, pwd, name, loc };
         const newWallet: IWallet = { "id": id, "usd": 10000, coins: {} }; // basically we will gvie 10000$. 
+        const newHist: IHistory = { "id": id, "data": []};  
 
         users.push(newUser); 
         wallets.push(newWallet); 
+        histories.push(newHist); 
 
         localStorage.setItem(USERS, JSON.stringify(users)); 
         localStorage.setItem(WALLET, JSON.stringify(wallets)); 
+        localStorage.setItem(HIST, JSON.stringify(histories));
 
         alert("New account is created.")
         reinitState();  

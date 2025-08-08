@@ -14,7 +14,6 @@ import { USERS
     , TransType
     , BUY, SELL 
  } from "./Data";
-import { readFileSync } from "node:fs";
 
 
 const Container = styled.div`
@@ -34,7 +33,9 @@ interface ITabProp {
     active?: boolean;
 }
 
-const Tab = styled.div<ITabProp>`
+const Tab = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'active', 
+})<ITabProp>`
   flex: 1;
   text-align: center;
   padding: 12px;
@@ -234,7 +235,8 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
 
     if (userWallets.length !== 1 || userHistories.length !== 1) {
         alert(`there is another id or no id.`); 
-        throw new Error(`wallets -> ${userWallets}`) 
+        console.log(`userWallets -> ${userWallets}, userHist-> ${userHistories}`)
+        throw new Error(`wallets -> ${userWallets.length}, hists -> ${userHistories.length}, histData -> ${histData}`) 
     } 
 
     const userWallet = userWallets[0]; 
@@ -287,9 +289,14 @@ export function TradePanel() {
     }, [curPriceData]);
 
     // hook done. 
-
     if (!userId) return <div>Fail</div>;
     if (!coinId) return <div>Fail</div>; 
+
+    const handleChange = (type: TransType) => {
+      changeData(userId, type, total, coinId, amount, price); 
+      setAmount(0); 
+    }
+
     if (isCurPriceLoading) return <div>Loading..</div>;
     if (curPriceError || (!curPriceData)) return <div>Fail</div>;
 
