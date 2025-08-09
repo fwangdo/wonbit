@@ -16,13 +16,12 @@ const MiddleDiv = styled.div`
 `
 
 const UserIdDiv = styled.div`
-    font-size: 30px ;
+    font-size: 30px;
 `
 
 const HistList = styled.ul`
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
+    list-style: none;
+    padding-left: 0;
 `;
 
 const Hist = styled.li`
@@ -72,12 +71,20 @@ function HistoryList() {
     const userHistory = filteredHistories[0]; 
 
     return (
-        <UserIdDiv>{`${userId}'s history`}</UserIdDiv>
-        // <HistList>
-        //     {Object.entries(userHistory.data).map(([data, type, coin, amount, price]) => (
-        //         <Hist></Hist>
-        //     ))}
-        // </HistList>
+        <>
+            <UserIdDiv>{`${userId}'s history`}</UserIdDiv>
+            <HistList>
+                {userHistory.data.slice().reverse().map(({date, type, coin, amount, price}, idx) => (
+                    <Hist key={date}>
+                        <DateSpan>{date}</DateSpan>
+                        <TranTypeSpan>{type}</TranTypeSpan>
+                        <CoinSpan>{coin}</CoinSpan>
+                        <AmountSpan>{amount}</AmountSpan> 
+                        <PriceSpan>{price}</PriceSpan>
+                    </Hist>
+                ))}
+            </HistList>
+        </>
     ); 
 }; 
 
