@@ -3,7 +3,7 @@ import { isLoginState, userIdState } from "../atoms/Atom";
 import { useNavigate, useParams } from "react-router-dom";
 import { StyledBtn } from "../Components/Member";
 import styled from "styled-components"; 
-import { IHistory, HIST } from "../Components/Data";
+import { IHistory, HIST, BUY, SELL, TransType } from "../Components/Data";
 import { checkData } from "../Components/CheckData"; 
 
 const MiddleDiv = styled.div`
@@ -38,23 +38,61 @@ const Hist = styled.li`
     padding: 0 0 0 20px; 
 `
 
-const TranTypeSpan = styled.span`
+const StyledSpan = styled.span`
+    margin-right: 10px;
 `
 
-const DateSpan = styled.span`
+interface TranTypeSpanProps {
+  $transType: TransType 
+}
+
+const TranTypeSpan = styled(StyledSpan)<TranTypeSpanProps>`   
+    color: ${({ $transType}) => ( $transType === SELL ? "blue" : "red")}; 
 `
 
-const CoinSpan = styled.span`
+const DateSpan = styled(StyledSpan)`
 `
 
-const UsdSpan = styled.span`
+const CoinSpan = styled(StyledSpan)`
 `
 
-const PriceSpan = styled.span`
+const PriceSpan = styled(StyledSpan)`
 `
 
-const AmountSpan = styled.span`
+const AmountSpan = styled(StyledSpan)`
 `
+
+// transition to kst. 
+interface ITimeProp {
+    year: string;    
+    month: string;
+    day: string;
+    hour: string;
+    minute: string;
+    second: string;
+}
+
+const formatter = new Intl.DateTimeFormat('ko-KR', {
+  timeZone: 'Asia/Seoul',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+});
+
+function dateToTime(date: number): string {
+    const parts = formatter.formatToParts(date);
+    const dateTimeObj: Partial<ITimeProp> = {};
+    parts.forEach(({ type, value }) => {
+        dateTimeObj[type as keyof ITimeProp] = value;
+    });
+    const res = `${dateTimeObj.year}-${dateTimeObj.month}-${dateTimeObj.day} ${dateTimeObj.hour}:${dateTimeObj.minute}:${dateTimeObj.second}`;
+    return res; 
+}
+
 
 function HistoryList() {
     const userId: string = checkData(useRecoilValue(userIdState));  
@@ -76,8 +114,8 @@ function HistoryList() {
             <HistList>
                 {userHistory.data.slice().reverse().map(({date, type, coin, amount, price}, idx) => (
                     <Hist key={date}>
-                        <DateSpan>{date}</DateSpan>
-                        <TranTypeSpan>{type}</TranTypeSpan>
+                        <DateSpan>{dateToTime(date)}</DateSpan>
+                        <TranTypeSpan $transType={type}>{type}</TranTypeSpan>
                         <CoinSpan>{coin}</CoinSpan>
                         <AmountSpan>{amount}</AmountSpan> 
                         <PriceSpan>{price}</PriceSpan>

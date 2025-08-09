@@ -28,9 +28,9 @@ React와 React Query를 사용하여 제작한 암호화폐 추적 및 가상 �
 - [X] 회원가입 알고리즘 만들기
 - [X] 매수 매도 기능 구현 
 - [X] 현재 보유 잔금
+- [X] history / wallet 란에 대응하는 ui 만들기. 
 
 ## 🎯 향후 계획
-- [ ] history / wallet 란에 대응하는 ui 만들기. 
 - [ ] Table 꾸미기  
 - [ ] Redux 기반 리팩토링  
 - [ ] 백엔드와 연동준비. 
