@@ -18,13 +18,18 @@ const UserIdDiv = styled.div`
     font-size: 30px ;
 `
 
-const CoinsList = styled.div``;  
+const CoinsList = styled.ul`
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+`;
+
 
 const Coin = styled.li`
     display: flex;
     list-style: none;
     background-color: white;
-    color: "#2f3640";   
+    color: #2f3640;   
     border-radius: 15px;
     margin-bottom: 10px;
     font-size: 20px;
