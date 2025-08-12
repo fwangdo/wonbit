@@ -15,6 +15,7 @@ import Login from "./Login";
 import { useRecoilValue } from "recoil"; 
 import { isLoginState } from "../atoms/Atom";  
 import { TradePanel } from "../Components/TradeTable"; 
+import { CoinTable } from "./CoinTable"; 
 
 
 export function MarketIndexRedirect() {
@@ -50,11 +51,11 @@ const Loader = styled.span`
 /* To generate table.
 */
 
-const CoinTable = styled.table`
+const PastCoinTable = styled.table`
     /* padding: 30px; // top right bottom left */
     width: auto;
     border-collapse: collapse;
-    justify-content: cneter;
+    justify-content: center;
 `; 
 
 const Thead = styled.thead`
@@ -109,7 +110,7 @@ const TradeWrapper = styled.div`
 `
 
 
-interface ICoinData {
+export interface ICoinData {
     current_price: number; 
     high_24h: number;
     id: string;
@@ -121,12 +122,12 @@ interface ICoinData {
     symbol: string; 
 }; 
 
-function GenCoinTable(data: ICoinData[]
+function GenPastCoinTable(data: ICoinData[]
                     , navigate: NavigateFunction
                     ) {
     
     return (
-        <CoinTable>
+        <PastCoinTable>
             <Thead>
                 <Tr>
                     <Th>Name</Th>
@@ -154,7 +155,7 @@ function GenCoinTable(data: ICoinData[]
                     </Tr>
                 ))}
             </tbody>
-        </CoinTable>
+        </PastCoinTable>
     );
 };
 
@@ -231,9 +232,10 @@ export function Market() {
             <TableWrapper>
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
-                ) : (
-                    GenCoinTable(data.slice(0, 30), navigate)
-                ) }
+                ) : 
+                    // GenPastCoinTable(data.slice(0, 30), navigate)
+                    <CoinTable data={data.slice(0,30)} navigate={navigate} /> 
+                 }
             </TableWrapper>
         </Container>
     );
