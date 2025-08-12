@@ -12,15 +12,16 @@ interface ShortLongData {
 }
 
 const ChartDiv = styled.div`
-    padding: "0 30px"; 
+    /* padding: "0 30px";  */
+    margin-left: 50px;
 `;
 
 function LongChart({ prices }: IMarketData) {
     return (
         <ApexChart 
             type="line"
-            width={800}
-            height={300}
+            width={1000}
+            height={400}
             series={[
                 {
                     name: "Prices", 
@@ -53,8 +54,8 @@ function ShortChart({ prices }: { prices: ICandleData }) {
     return (
         <ApexChart 
             type="candlestick"
-            width={800}
-            height={300}
+            width={1000}
+            height={400}
             series={[
                 {
                     name: "Short-term candle prices", 

@@ -37,7 +37,8 @@ const Container = styled.div`
   padding: 10px 20px;
   margin: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  /* align-content: space-between; */
 `;
 
 // loader.
@@ -53,6 +54,7 @@ const CoinTable = styled.table`
     /* padding: 30px; // top right bottom left */
     width: auto;
     border-collapse: collapse;
+    justify-content: cneter;
 `; 
 
 const Thead = styled.thead`
@@ -92,12 +94,14 @@ const Tr = styled.tr`
 `
 
 const TableWrapper = styled.div`
-  flex: 1;
+  margin-left: auto;
+  width: 400px; /* 원하는 폭 지정 가능 */
+  /* flex: 1; */
 `;
 
 const ChartWrapper = styled.div`
   flex: 1;
-  margin-right: 20px;
+  /* margin-right: 20px; */
 `;
 
 const TradeWrapper = styled.div`
