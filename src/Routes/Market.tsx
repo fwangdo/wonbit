@@ -36,6 +36,7 @@ export function MarketIndexRedirect() {
 
 const Container = styled.div`
   padding: 10px 20px;
+  /* background-color: whi; */
   margin: 0;
   display: flex;
   justify-content: center;
@@ -172,6 +173,7 @@ export function CoinChart() {
         // initializing. 
         if (!coinId) return; 
 
+        // TODO: suspense를 이용한 방향으로 변경. 
         const timeoutId = setTimeout(() => {
             Promise.all([
                 fetchCoinHistory(coinId),
@@ -225,10 +227,10 @@ export function Market() {
 
     return (
         <Container>
-            <ChartWrapper>
+            <div className="flex-1 ml-4 p-4">
                 <Outlet />
                 <TradeTable />
-            </ChartWrapper>
+            </div>
             <TableWrapper>
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>

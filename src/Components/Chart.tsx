@@ -88,7 +88,7 @@ export function Chart({ long, short }: ShortLongData) {
     console.log(short)
 
     return (
-        <div className="ml-12 p-4">
+        <div >
             <LongChart prices={long.prices} />
             <ShortChart prices={short} />
         </div>
