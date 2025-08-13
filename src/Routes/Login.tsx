@@ -1,7 +1,6 @@
-import styled from "styled-components";
-import { useState, useEffect } from 'react'; 
+import { useState } from 'react'; 
 import { useNavigate } from "react-router-dom";
-import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
+import { Col, StyledInput, StyledBtn} from "../Components/Member"; 
 import { USERS, IUser } from "../Components/Data"; 
 import { isLoginState, userIdState } from "../atoms/Atom"; 
 import {
@@ -55,14 +54,16 @@ function Login() {
     
     return (
         <Col>
-            {   isLogin ? (
+            {isLogin ? (
                 <div>Done</div>
                 ) : (
                 <>
                 Log in
-                <StyledInput value={id} onChange={changeId} placeholder="Id" marginTop="80px" />
-                <StyledInput value={pwd} onChange={changePwd} placeholder="Password" marginTop="5px"/>
-                <StyledBtn onClick={handleLogin}>Login</StyledBtn>
+                <StyledInput value={id} onChange={changeId} placeholder="Id" />
+                <StyledInput value={pwd} type="password" onChange={changePwd} placeholder="Password" />
+                <div>
+                    <StyledBtn onClick={handleLogin}>Login</StyledBtn>
+                </div>
                 </>
                 )
             }

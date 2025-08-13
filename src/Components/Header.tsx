@@ -3,6 +3,7 @@ import { Link, useMatch, useLocation } from 'react-router-dom';
 import wonbit from '../Assets/wonbit.jpeg'; 
 import { useRecoilState } from "recoil"; 
 import { isLoginState } from '../atoms/Atom'; 
+import { BlueColor } from './CommonColor';
 
 
 const Item = styled.li`
@@ -21,7 +22,6 @@ const StyledLink = styled(Link)`
 
   &:hover {
     color: ${(props) => props.theme.black.lighter};
-        <Container>
   }
 
   &:visited {
@@ -59,7 +59,7 @@ function Header() {
     };
 
     return (
-        <div className='flex w-full h-[5vh] m-0 p-0 justify-between items-center bg-[#3356b0] px-[15vw]'>
+        <div className={`flex w-full h-[5vh] m-0 p-0 justify-between items-center bg-[${BlueColor}] px-[15vw]`}>
             <ul className='flex'>
                 <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>

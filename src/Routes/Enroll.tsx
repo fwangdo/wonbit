@@ -75,12 +75,12 @@ function Enroll() {
             </div>
 
             <div>
-                <StyledInput placeholder="Password" value={pwd} onChange={handleChange("pwd") } /> 
+                <StyledInput placeholder="Password" value={pwd} type="password" onChange={handleChange("pwd") } /> 
                 {errors.pwd && <ErrorMessage>{errors.pwd}</ErrorMessage>}
             </div>
     
             <div>
-                <StyledInput placeholder="Password Check" value={pwd2} onChange={handleChange("pwd2")} /> 
+                <StyledInput placeholder="Password Check" value={pwd2} type="password" onChange={handleChange("pwd2")} /> 
                 {errors.pwd2 && <ErrorMessage>{errors.pwd2}</ErrorMessage>}
             </div> 
 

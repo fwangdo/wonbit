@@ -4,7 +4,7 @@ import React from "react";
 
 export function Col( { children } : { children: React.ReactNode} ) {
     return (
-        <div className="flex flex-col align-center justify-center w-full m-0 p-0 h-1 mt-[150px] text-[50px]">
+        <div className="flex flex-col items-center w-full m-0 p-0 mt-[150px] text-[50px]">
             {children}
         </div>
     )
@@ -26,18 +26,17 @@ export function StyledInput({ marginTop = "15px", ...props }: StyledInputProps) 
     return (
         <input 
             {...props}
-            className={`w-[500px] h-[30px] p-2 text-[16px] rounded-[10px] border border-solid`}
+            className={`w-[500px] h-[60px] p-2 text-[16px] rounded-[10px] border border-solid`}
             style={{marginTop}}
         />
     )
 }
 
-
 export function StyledBtn({...props}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
     return (
         <button 
             {...props}
-            className={`w-[500px] h-[40px] text-[16px] p-[8px] mt-[10px] bg-color-[#3748cf] text-white border rounded-[10px] cursor-pointer`}
+            className={`w-[500px] h-[50px] text-[16px] p-[8px] mt-[10px] bg-[#3748cf] text-white border rounded-[10px] cursor-pointer`}
         />
     )
 };
