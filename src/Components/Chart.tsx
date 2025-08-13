@@ -85,8 +85,6 @@ function ShortChart({ prices }: { prices: ICandleData }) {
 
 
 export function Chart({ long, short }: ShortLongData) {
-    console.log(short)
-
     return (
         <div >
             <LongChart prices={long.prices} />

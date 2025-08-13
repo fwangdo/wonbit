@@ -6,23 +6,30 @@ import styled from "styled-components";
 import { IHistory, HIST, BUY, SELL, TransType } from "../Components/Data";
 import { checkData } from "../Components/CheckData"; 
 
-const MiddleDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 200vh;
-    gap: 30px;
-    padding: 30px; 
-`
+interface IReactContainer {
+    children?: React.ReactNode
+}
 
-const UserIdDiv = styled.div`
-    font-size: 30px;
-`
+function MiddleDiv({children}: IReactContainer) {
+    return (
+        <div className={`
+            flex
+            flex-col
+            align-center
+            h-[200vh]
+            gap-[30px]
+            p-[30px]
+            `}>{children}</div>
+    )
+} 
 
-const HistList = styled.ul`
-    list-style: none;
-    padding-left: 0;
-`;
+function UserIdDiv({ children }: IReactContainer) {
+    return <div className="text-[30px]">{children}</div>
+}
+
+function HistList({ children }: IReactContainer) {
+    return <div className="pl-0 list-none">{children}</div>
+}
 
 const Hist = styled.li`
     display: flex;
@@ -133,11 +140,11 @@ function History() {
 
     return (
         <MiddleDiv>
-        {isLogin ? (
-            <HistoryList />
-        ) : (
-            <StyledBtn onClick={() => navigate("/login")}>Login</StyledBtn>
-        )}
+            {isLogin ? (
+                <HistoryList />
+            ) : (
+                <StyledBtn onClick={() => navigate("/login")}>Login</StyledBtn>
+            )}
         </MiddleDiv>
     ); 
 }
