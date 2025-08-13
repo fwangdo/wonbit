@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { styled } from 'styled-components';
 import { Link, useMatch, useLocation } from 'react-router-dom'; 
 import wonbit from '../Assets/wonbit.jpeg'; 
@@ -6,21 +5,10 @@ import { useRecoilState } from "recoil";
 import { isLoginState } from '../atoms/Atom'; 
 
 
-const Col = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 가로 중앙 정렬 */
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: #3356b0;
-`;
-
 const Items = styled.ul`
     display: flex;
     align-items: center; 
-    margin-right: 100px;
+    margin-right: 0.5;
 `; 
 
 const Item = styled.li`
@@ -60,7 +48,6 @@ export const Img = styled.img`
 
 function Header() {
     const homeMatch = useMatch('/'); 
-    // const marketMatch = useMatch('/market'); 
     const walletMatch = useMatch('/wallet'); 
     const marketMatch = useLocation().pathname.startsWith("/market");  
     const histMatch = useMatch('/history');  
@@ -77,8 +64,7 @@ function Header() {
     };
 
     return (
-        <>
-        <Col>
+        <div className='flex w-full h-full m-0 p-0 justify-center items-center bg-[#3356b0]'>
             <Items>
                 <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>
@@ -96,8 +82,7 @@ function Header() {
                 } 
                 <Item><StyledLink to="/enroll">{ enrollMatch ? <Bold>Enroll</Bold> : "Enroll" }</StyledLink></Item>
             </Items>
-        </Col>
-        </>
+        </div>
     ); 
 }; 
 
