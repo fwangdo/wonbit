@@ -30,11 +30,11 @@ React와 React Query를 사용하여 제작한 암호화폐 추적 및 가상 �
 - [X] 현재 보유 잔금
 - [X] history / wallet 란에 대응하는 ui 만들기. 
 - [X] zustand 기반 리팩토링  
+- [X] Table -> div로 변경
+- [X] market에서 로그인창 넣기
+- [X] css 모두 변경 
 
 ## 🎯 향후 계획
-- [ ] Table -> div로 변경
-- [ ] market에서 로그인창 넣기
-- [ ] css 모두 변경 
 - [ ] 백엔드와 연동준비. 
 
 ## 📊 기술적 도전 과제
