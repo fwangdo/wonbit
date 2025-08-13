@@ -1,17 +1,26 @@
 import styled from "styled-components";  
+import React from "react"; 
 
-export const Col = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* 가로 중앙 정렬 */
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    margin-top: 150px;
-    font-size: 50px;
-`;
+// export const Col = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center; /* 가로 중앙 정렬 */
+//     width: 100%;
+//     margin: 0;
+//     padding: 0;
+//     height: 100%;
+//     margin-top: 150px;
+//     font-size: 50px;
+// `;
+
+export function Col( { children } : { children: React.ReactNode} ) {
+    return (
+        <div className="flex flex-col align-center justify-center w-full m-0 p-0 h-1 mt=[150px] text-[50px]">
+            {children}
+        </div>
+    )
+}
 
 export const InputStyle = {
     width: "500px",   // 가로 크기 조절
