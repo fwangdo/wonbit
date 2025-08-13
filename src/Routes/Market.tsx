@@ -16,6 +16,7 @@ import { useRecoilValue } from "recoil";
 import { isLoginState } from "../atoms/Atom";  
 import { TradePanel } from "../Components/TradeTable"; 
 import { CoinTable } from "./CoinTable"; 
+import { StyledBtn } from "../Components/Member";
 
 
 export function MarketIndexRedirect() {
@@ -189,11 +190,16 @@ export function CoinChart() {
 
 export function TradeTable() {
     const isLogin = useRecoilValue(isLoginState);  
+    const navigate = useNavigate(); 
 
     return (
         isLogin ? ( 
             <TradePanel />
-         ) : null 
+         ) : (
+        <div className="flex justify-center mt-4">
+            <StyledBtn onClick={() => navigate("/login")}>Login</StyledBtn>
+        </div>
+        )
     ); 
 }
 

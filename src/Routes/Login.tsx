@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { useNavigate } from "react-router-dom";
 import { Col, StyledInput, StyledBtn} from "../Components/Member"; 
 import { USERS, IUser } from "../Components/Data"; 
@@ -16,6 +16,12 @@ function Login() {
     const [isLogin, setIsLogin] = useRecoilState(isLoginState); 
     const [userId, setUserId ] = useRecoilState(userIdState); 
     const navigate = useNavigate(); 
+
+    useEffect(() => {
+        if (isLogin) {
+            navigate("/"); 
+        }
+    }, [isLogin, navigate])
 
     function genCatchFunc(elem: React.Dispatch<React.SetStateAction<string>>) {
         function catchFunc(e: React.ChangeEvent<HTMLInputElement>) { 
@@ -54,9 +60,7 @@ function Login() {
     
     return (
         <Col>
-            {isLogin ? (
-                <div>Done</div>
-                ) : (
+            {!isLogin && ( 
                 <>
                 Log in
                 <StyledInput value={id} onChange={changeId} placeholder="Id" />

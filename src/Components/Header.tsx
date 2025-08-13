@@ -16,6 +16,8 @@ const Item = styled.li`
   flex-direction: column;
 `; 
 
+// function Item = 
+
 const StyledLink = styled(Link)`
   color: ${(props) => props.theme.white.lighter};
   text-decoration: none;
@@ -70,7 +72,7 @@ function Header() {
 
             <ul className='flex'>
                 { isLogin ? (
-                    <Item onClick={execLogout}>Logout</Item>
+                    <Item onClick={execLogout}><StyledLink to="/">Logout</StyledLink></Item>
                 ): (
                     <Item><StyledLink to="/login">{ loginMatch ? <Bold>Login</Bold> : "Login" }</StyledLink></Item>
                 )
