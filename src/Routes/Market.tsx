@@ -36,7 +36,6 @@ export function MarketIndexRedirect() {
 
 const Container = styled.div`
   padding: 10px 20px;
-  /* background-color: whi; */
   margin: 0;
   display: flex;
   justify-content: center;
@@ -226,20 +225,20 @@ export function Market() {
     */
 
     return (
-        <Container>
+        <div className="flex justify-center">
             <div className="flex-1 ml-4 p-4">
                 <Outlet />
                 <TradeTable />
             </div>
-            <TableWrapper>
+            <div className="w-[30vw]">
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
                 ) : 
                     // GenPastCoinTable(data.slice(0, 30), navigate)
                     <CoinTable data={data.slice(0,30)} navigate={navigate} /> 
                  }
-            </TableWrapper>
-        </Container>
+            </div>
+        </div>
     );
 }
 

@@ -5,12 +5,6 @@ import { useRecoilState } from "recoil";
 import { isLoginState } from '../atoms/Atom'; 
 
 
-const Items = styled.ul`
-    display: flex;
-    align-items: center; 
-    margin-right: 0.5;
-`; 
-
 const Item = styled.li`
   margin-right: 30px;
   color: ${(props) => props.theme.white.lighter};
@@ -64,16 +58,16 @@ function Header() {
     };
 
     return (
-        <div className='flex w-full h-full m-0 p-0 justify-center items-center bg-[#3356b0]'>
-            <Items>
+        <div className='flex w-full h-[5vh] m-0 p-0 justify-between items-center bg-[#3356b0] px-[20vw]'>
+            <ul className='flex'>
                 <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>
                 <Item><StyledLink to="/market">{ marketMatch ? <Bold>Market</Bold> : "Market" }</StyledLink></Item>
                 <Item><StyledLink to="/wallet">{ walletMatch ? <Bold>Wallet</Bold> : "Wallet" }</StyledLink></Item>
                 <Item><StyledLink to="/history">{ histMatch ? <Bold>History</Bold> : "History" }</StyledLink></Item>
-            </Items>
+            </ul>
 
-            <Items>
+            <ul className='flex'>
                 { isLogin ? (
                     <Item onClick={execLogout}>Logout</Item>
                 ): (
@@ -81,7 +75,7 @@ function Header() {
                 )
                 } 
                 <Item><StyledLink to="/enroll">{ enrollMatch ? <Bold>Enroll</Bold> : "Enroll" }</StyledLink></Item>
-            </Items>
+            </ul>
         </div>
     ); 
 }; 

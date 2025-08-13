@@ -1,10 +1,14 @@
 import { ICoinData } from "./Market"; 
 import { NavigateFunction } from "react-router-dom";
+import { useParams, useMatch } from "react-router-dom";
 
-export function CoinTable(
-                {data, navigate}: {data: ICoinData[], navigate: NavigateFunction}
-                ) {
+export function CoinTable({data, navigate}: {data: ICoinData[], navigate: NavigateFunction}) {
+    const { coinId } = useParams(); 
 
+    if (!coinId) {
+        throw new Error(`cannot find current location`); 
+    }
+    
     return (
         <div>
             <div className="w-full text-sm">
@@ -20,8 +24,11 @@ export function CoinTable(
                     {data.map((coin) => (
                         <div 
                             key={coin.symbol}
-                            className="grid grid-cols-3 gap-4 py-2 px-2 hover:bg-gray-50 transition-colors bg-white"
-                        >
+                            className={`grid grid-cols-3 gap-4 py-2 px-2 hover:bg-gray-50 transition-colors ${
+                                coinId === coin.id 
+                                ? 'bg-gray-100'
+                                : 'bg-white'
+                            }`}>
                             <div 
                             className="cursor-pointer text-blue-600 hover:text-blue-800 font-medium"
                             onClick={() => navigate(`/market/${coin.id}`, {
