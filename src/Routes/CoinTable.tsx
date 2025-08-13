@@ -3,10 +3,11 @@ import { NavigateFunction } from "react-router-dom";
 import { useParams, useMatch } from "react-router-dom";
 
 export function CoinTable({data, navigate}: {data: ICoinData[], navigate: NavigateFunction}) {
-    const { coinId } = useParams(); 
+    let { coinId } = useParams(); 
 
     if (!coinId) {
-        throw new Error(`cannot find current location`); 
+        navigate(`/market/bitcoin`);
+        coinId = `bitcoin`;
     }
     
     return (
@@ -45,7 +46,7 @@ export function CoinTable({data, navigate}: {data: ICoinData[], navigate: Naviga
                             <div className={`text-right font-medium ${
                                 coin.price_change_percentage_24h >= 0 
                                 ? 'text-green-600'
-                                : 'tex-red-600'
+                                : 'text-red-600'
                             }`}>
                                 {coin.price_change_percentage_24h.toFixed(2)}
                             </div>

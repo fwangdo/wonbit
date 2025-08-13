@@ -34,14 +34,6 @@ export function MarketIndexRedirect() {
   return <div>Loading...</div>;
 }
 
-const Container = styled.div`
-  padding: 10px 20px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  /* align-content: space-between; */
-`;
-
 // loader.
 const Loader = styled.span`
     text-align: center;
@@ -225,12 +217,12 @@ export function Market() {
     */
 
     return (
-        <div className="flex justify-center">
-            <div className="flex-1 ml-4 p-4">
+        <div className="flex justify-center p-4">
+            <div className="flex-1 ml-4 p-2">
                 <Outlet />
                 <TradeTable />
             </div>
-            <div className="w-[30vw]">
+            <div className="w-[30vw] px-2">
                 { (!data || isLoading) ? (
                     <Loader>Loading...</Loader>
                 ) : 

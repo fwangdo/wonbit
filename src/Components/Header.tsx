@@ -21,6 +21,7 @@ const StyledLink = styled(Link)`
 
   &:hover {
     color: ${(props) => props.theme.black.lighter};
+        <Container>
   }
 
   &:visited {
@@ -58,7 +59,7 @@ function Header() {
     };
 
     return (
-        <div className='flex w-full h-[5vh] m-0 p-0 justify-between items-center bg-[#3356b0] px-[20vw]'>
+        <div className='flex w-full h-[5vh] m-0 p-0 justify-between items-center bg-[#3356b0] px-[15vw]'>
             <ul className='flex'>
                 <Img src={wonbit}/>
                 <Item><StyledLink to="/">{ homeMatch ? <Bold>Home</Bold> : "Home" }</StyledLink></Item>
