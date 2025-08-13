@@ -8,16 +8,6 @@ import { BlueColor } from './CommonColor';
 import { theme } from '../theme'; 
 
 
-// const Item = styled.li`
-//   margin-right: 30px;
-//   color: ${(props) => props.theme.white.lighter};
-//   transition: color 0.3s ease-in-out;
-//   position: relative;
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
-// `; 
-
 interface IItemProps extends React.LiHTMLAttributes<HTMLElement>{
     color?: string;
     children: React.ReactNode; 
@@ -35,30 +25,44 @@ function Item( { color = theme.white.lighter, children, ...props }: IItemProps) 
     ); 
 }
 
-const StyledLink = styled(Link)`
-  color: ${(props) => props.theme.white.lighter};
-  text-decoration: none;
+function StyledLink({children, to, ...props}: { children: React.ReactNode, to: string }) {
+    return (
+        <Link
+            {...props}
+            to={to}
+            className={`
+                no-underline
+                transition-colors duration-300 ease-in-out
+                hover:[color:${theme.black.lighter}]
+                visited:[color:${theme.white.lighter}]
+            `}
+            style={{color: theme.white.lighter}}
+        >
+            {children}
+        </Link>
+    )
+}
 
-  &:hover {
-    color: ${(props) => props.theme.black.lighter};
-  }
+function Bold( { children }: { children: React.ReactNode }) {
+    return (
+        <span className={`
+            text-[${theme.white.lighter}]          
+            font-bold
+        `}
+        >
+            {children}
+        </span>
+    )
+}; 
 
-  &:visited {
-    color: ${(props) => props.theme.white.lighter};
-  }
-`; 
-
-
-const Bold = styled.span`
-    color: ${(props) => props.theme.white.lighter};
-    font-weight: bold;
-`
-
-export const Img = styled.img`
-    width: 90px;
-    margin-right: 30px;
-`
-
+function Img({...props}) {
+    return ( 
+        <img
+            {...props}
+            className={`w-[90px] mr-[30px]`}
+        />
+    )
+}
 
 function Header() {
     const homeMatch = useMatch('/'); 
