@@ -15,7 +15,7 @@ function MiddleDiv({children}: IReactContainer) {
         <div className={`
             flex
             flex-col
-            align-center
+            items-center
             h-[200vh]
             gap-[30px]
             p-[30px]
@@ -41,7 +41,7 @@ function Hist({children}: IReactContainer) {
             rounded-[15px]
             mb-[10px]
             text-[20px]
-            w-[500px]
+            w-[50vw]
             h-[40px]
             items-center
             pl-[20px] 
@@ -61,20 +61,63 @@ const TranTypeSpan = styled(StyledSpan)<TranTypeSpanProps>`
     color: ${({ $transType}) => ( $transType === SELL ? "blue" : "red")}; 
 `
 
-const DateSpan = styled(StyledSpan)`
-`
+function TranTypeDiv({ children, transType }: IReactContainer & { transType: string }) {
+    const colorClass = transType === SELL ? "text-blue-600" : "text-red-600"; 
 
-const CoinSpan = styled(StyledSpan)`
-`
+    return (
+        <div className={`
+            w-[50px]
+            p-[10px]
+            ${colorClass}
+        `}>
+            {children}
+        </div>
+    )
+}
 
-const PriceSpan = styled(StyledSpan)`
-`
+function DateDiv( {children}: IReactContainer ) {
+    return (
+        <div className={`
+            w-[230px]
+            p-[10px]
+        `}>
+            {children}
+        </div>
+    )
+}
 
-const AmountSpan = styled(StyledSpan)`
-`
+function CoinDiv( {children}: IReactContainer ) {
+    return (
+        <div className={`
+            w-[100px]
+            p-[10px]
+        `}>
+            {children}
+        </div>
+    )
+}
 
-// function TranTypeSpan()
+function PriceDiv( {children}: IReactContainer ) {
+    return (
+        <div className={`
+            w-[50px]
+            p-[10px]
+        `}>
+            {children}
+        </div>
+    )
+}
 
+function AmountDiv( {children}: IReactContainer ) {
+    return (
+        <div className={`
+            w-[50px]
+            p-[10px]
+        `}>
+            {children}
+        </div>
+    )
+}
 
 // transition to kst. 
 interface ITimeProp {
@@ -128,11 +171,11 @@ function HistoryList() {
             <HistList>
                 {userHistory.data.slice().reverse().map(({date, type, coin, amount, price}, idx) => (
                     <Hist key={date}>
-                        <DateSpan>{dateToTime(date)}</DateSpan>
-                        <TranTypeSpan $transType={type}>{type}</TranTypeSpan>
-                        <CoinSpan>{coin}</CoinSpan>
-                        <AmountSpan>{amount}</AmountSpan> 
-                        <PriceSpan>{price}</PriceSpan>
+                        <DateDiv>{dateToTime(date)}</DateDiv>
+                        <TranTypeDiv transType={type}>{type}</TranTypeDiv>
+                        <CoinDiv>{coin}</CoinDiv>
+                        <AmountDiv>{amount}</AmountDiv> 
+                        <PriceDiv>{price}</PriceDiv>
                     </Hist>
                 ))}
             </HistList>
