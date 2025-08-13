@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from './Components/Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from "./Routes/Home"; 
@@ -11,7 +10,6 @@ import Enroll from "./Routes/Enroll";
 import { styled } from "styled-components";
 import {
   RecoilRoot, 
-  useRecoilState
 } from "recoil"; 
 
 const ContentWrapper = styled.div`

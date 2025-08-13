@@ -1,22 +1,39 @@
+import React from "react"; 
 import { styled } from 'styled-components';
 import { Link, useMatch, useLocation } from 'react-router-dom'; 
 import wonbit from '../Assets/wonbit.jpeg'; 
 import { useRecoilState } from "recoil"; 
 import { isLoginState } from '../atoms/Atom'; 
 import { BlueColor } from './CommonColor';
+import { theme } from '../theme'; 
 
 
-const Item = styled.li`
-  margin-right: 30px;
-  color: ${(props) => props.theme.white.lighter};
-  transition: color 0.3s ease-in-out;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-`; 
+// const Item = styled.li`
+//   margin-right: 30px;
+//   color: ${(props) => props.theme.white.lighter};
+//   transition: color 0.3s ease-in-out;
+//   position: relative;
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+// `; 
 
-// function Item = 
+interface IItemProps extends React.LiHTMLAttributes<HTMLElement>{
+    color?: string;
+    children: React.ReactNode; 
+}
+
+function Item( { color = theme.white.lighter, children, ...props }: IItemProps) {
+    return (
+        <li
+            {...props}
+            className="mr-[30px] transition-colors duration-300 ease-in-out relative flex justify-center flex-col"
+            style={{color}}
+        >
+            {children}
+        </li>
+    ); 
+}
 
 const StyledLink = styled(Link)`
   color: ${(props) => props.theme.white.lighter};
