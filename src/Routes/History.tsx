@@ -31,19 +31,23 @@ function HistList({ children }: IReactContainer) {
     return <div className="pl-0 list-none">{children}</div>
 }
 
-const Hist = styled.li`
-    display: flex;
-    list-style: none;
-    background-color: white;
-    color: #2f3640;   
-    border-radius: 15px;
-    margin-bottom: 10px;
-    font-size: 20px;
-    width: 500px;
-    height: 40px;
-    align-items: center;
-    padding: 0 0 0 20px; 
-`
+function Hist({children}: IReactContainer) {
+    return (
+        <li className={`
+            flex
+            list-none
+            bg-[white]
+            text-[#2f3640]
+            rounded-[15px]
+            mb-[10px]
+            text-[20px]
+            w-[500px]
+            h-[40px]
+            items-center
+            pl-[20px] 
+            `}>{children}</li>
+    )
+}
 
 const StyledSpan = styled.span`
     margin-right: 10px;
@@ -68,6 +72,9 @@ const PriceSpan = styled(StyledSpan)`
 
 const AmountSpan = styled(StyledSpan)`
 `
+
+// function TranTypeSpan()
+
 
 // transition to kst. 
 interface ITimeProp {
