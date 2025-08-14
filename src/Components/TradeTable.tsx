@@ -16,6 +16,7 @@ import {
 import { IReactProps } from "../Components/Member"; 
 import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError, AppError } from "../errors/AppErrors";
 import { useErrorHandler } from "../hooks/useErrorHandler";
+import { useTrading } from "../hooks/useTrading";
 
 
 function ContainerDiv({ children }: IReactProps) {
@@ -180,156 +181,6 @@ function StyledBtn({
   </button>) 
 }
 
-// wallet. 
-function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
-    const curUsd = userWallet.usd;
-    if (curUsd < total) {
-      throw new InsufficientFundsError(total, userWallet.usd); 
-    }
-
-    const newUsd = userWallet.usd - total; 
-    let newCoinAmount = 0 
-    if (coinId in userWallet.coins) {
-        newCoinAmount = userWallet.coins[coinId];
-    }
-
-    newCoinAmount += amount; 
-    return {
-      id: userWallet.id,  
-      usd: newUsd,  
-      coins: {
-        ...userWallet.coins, 
-        [coinId]: newCoinAmount
-      }
-    }; 
-}
-
-// TODO: no side effect. 
-function reflectSellOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
-    const curCoin = userWallet.coins[coinId] ?? 0; 
-    if (curCoin < amount) {
-        throw new InsufficientCoinError(coinId, amount, curCoin); 
-    }
-
-    const newCoinAmount = curCoin - amount;
-    const newUsd = userWallet.usd + total; 
-
-    return {
-      id: userWallet.id
-      , usd: newUsd
-      , coins: {
-        ...userWallet.coins
-        , [coinId]: newCoinAmount
-      }
-    }
-}
-
-function reflectOnWallet(type: TransType, userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
-  if (type === BUY) {
-    return reflectBuyOnWallet(userWallet, total, coinId, amount); 
-  } else {
-    return reflectSellOnWallet(userWallet, total, coinId, amount); 
-  }
-}
-
-
-function reflectBuyOnHist(userHist: IHistory, total: number, coinId: string, amount: number, price: number): IHistory {
-  // we can posit that the trade that use made is possible. 
-  const curDate = Date.now(); 
-  const curTrans: ITrans= { 
-    date: curDate
-    , type: BUY
-    , coin: coinId 
-    , amount: amount
-    , price: price
-  }; 
-  
-  return {
-    id: userHist.id, 
-    data: [...userHist.data, curTrans]
-  }; 
-}
-
-function reflectSellOnHist(userHist: IHistory, total: number, coinId: string, amount: number, price: number): IHistory {
-  // we can posit that the trade that use made is possible. 
-  const curDate = Date.now(); 
-  const curTrans: ITrans= { 
-    date: curDate
-    , type: SELL  
-    , coin: coinId 
-    , amount: amount
-    , price: price
-  }; 
-  
-  return {
-    id: userHist.id, 
-    data: [...userHist.data, curTrans]
-  }; 
-}
-
-function reflectOnHist(type: TransType, userHist: IHistory, total: number, coinId: string, amount: number, price: number): IHistory {
-  if (type === BUY) {
-    return reflectBuyOnHist(userHist, total, coinId, amount, price); 
-  } else {
-    return reflectSellOnHist(userHist, total, coinId, amount, price); 
-  }
-}
-
-// get new wallets. 
-function genNewDatas<T extends {id: string}>(userId: string, userDatas: T[], newUserData: T): T[] {
-    const idx = userDatas.findIndex((Data) => Data.id === userId); 
-    if (idx === -1) {
-      // throw new Error(`${userId} does not exist in Data`)
-      throw new UserNotFoundError(userId); 
-    }
-
-    return [
-      ...userDatas.slice(0, idx)
-      , newUserData
-      , ...userDatas.slice(idx + 1),
-    ]; 
-};
-
-// change data. 
-function changeData(userId: string, type: TransType, total: number, coinId: string, amount: number, price: number) {
-    const tempWalletData = localStorage.getItem(WALLET);
-    const tempHistData = localStorage.getItem(HIST);  
-
-    if (!tempWalletData || !tempHistData) {
-        throw new UserNotFoundError(userId); 
-    }
-
-    const walletData: IWallet[] = JSON.parse(tempWalletData); 
-    const histData: IHistory[] = JSON.parse(tempHistData); 
-
-    const userWallets = walletData.filter((data) => data.id === userId); 
-    const userHistories = histData.filter((data) => data.id === userId );  
-
-    if (userWallets.length !== 1 || userHistories.length !== 1) {
-        throw new UserNotFoundError(userId); 
-    } 
-
-    const userWallet = userWallets[0]; 
-    const userHistory = userHistories[0]; 
-    
-    // wallet change
-    const newUserWallet = reflectOnWallet(type, userWallet, total, coinId, amount); 
-
-    // hist change. 
-    const newUserHist = reflectOnHist(type, userHistory, total, coinId, amount, price); 
-
-    // update.. 
-    const newWalletData = genNewDatas(userId, walletData, newUserWallet); 
-    const newHistData = genNewDatas(userId, histData, newUserHist);
-
-    // TODO: changen new userWallet. 
-    localStorage.setItem(WALLET, JSON.stringify(newWalletData));
-    localStorage.setItem(HIST, JSON.stringify(newHistData)); 
-
-    return;  
-}; 
-
-
 export function TradePanel() {
     // hook should be on the top always!
     const userId = useRecoilValue(userIdState); 
@@ -338,6 +189,7 @@ export function TradePanel() {
     const [price, setPrice] = useState(0);
     const [amount, setAmount] = useState(0);
     
+    const { executeTrade, isTrading } = useTrading(coinId!); 
     // error handling. 
     const { error, handleError, clearError } = useErrorHandler(); 
     
@@ -364,31 +216,18 @@ export function TradePanel() {
     // hook done. 
     if (!userId) return <div>Fail</div>;
     if (!coinId) return <div>Fail</div>; 
-
-    const handleChange = (type: TransType) => {
-      try {
-        changeData(userId, type, total, coinId, amount, price); 
-        setAmount(0); 
-        alert(`주문이 완료되었습니다.`)
-      } catch (err) {
-          handleError(err); 
-          alert(error?.userMessage)
-      }
-    }
-   
-
     if (isCurPriceLoading) return <div>Loading..</div>;
     if (curPriceError || (!curPriceData)) return <div>Fail</div>;
 
+    const handleChange = async (type: TransType) => {
+      const result = await executeTrade(type, amount, price)
+      if (result.success) {
+        setAmount(0); 
+        alert(`The order is done.`)
+      }
+    }
+
     const total = price * amount;
-
-    // retry function. 
-    const handleRetry = () => {
-        if (activeTab) {
-            handleChange(activeTab as TransType);
-        }
-    };
-
 
     const TradeForBuy = () => { 
         return (
