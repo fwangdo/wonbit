@@ -16,7 +16,7 @@ import {
  } from "./Data";
 import { IReactProps } from "../Components/Member"; 
 
-import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError } from "../errors/AppErrors";
+import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError, AppError } from "../errors/AppErrors";
 import { useErrorHandler } from "../hooks/useErrorHandler";
 import { ErrorToast } from "../errors/ErrorHandler";
 
@@ -336,16 +336,19 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
 export function TradePanel() {
     // hook should be on the top always!
     const userId = useRecoilValue(userIdState); 
-    const { error, handleError, clearError } = useErrorHandler(); 
     const { coinId } = useParams<{coinId : string}>(); 
     const [activeTab, setActiveTab] = useState("buy");
+    const [price, setPrice] = useState(0);
+    const [amount, setAmount] = useState(0);
+    
+    // error handling. 
+    const { error, handleError, clearError } = useErrorHandler(); 
     
     const { data: curPriceData, isLoading: isCurPriceLoading, error: curPriceError } = useQuery({ 
         queryKey: [ 'curPrice', coinId ],
         queryFn: () => {
             // handling nullabe case. 
             if (!coinId) {
-                // throw new Error('coinId is required'); 
                 throw new ApiError('coinId is required', false);  
             }
             return fetchCurPrice(coinId)
@@ -353,8 +356,6 @@ export function TradePanel() {
         enabled: !!coinId
     }); 
     
-    const [price, setPrice] = useState(0);
-    const [amount, setAmount] = useState(0);
     // if you use setPrice directly, it would cause re-rendering, then it leads infinite recursion. 
     useEffect(() => {
         if (curPriceData) {
@@ -368,15 +369,28 @@ export function TradePanel() {
     if (!coinId) return <div>Fail</div>; 
 
     const handleChange = (type: TransType) => {
-      changeData(userId, type, total, coinId, amount, price); 
-      setAmount(0); 
-      alert(`주문이 완료되었습니다.`)
+      try {
+        changeData(userId, type, total, coinId, amount, price); 
+        setAmount(0); 
+        alert(`주문이 완료되었습니다.`)
+      } catch (err) {
+          handleError(err); 
+      }
     }
+   
 
     if (isCurPriceLoading) return <div>Loading..</div>;
     if (curPriceError || (!curPriceData)) return <div>Fail</div>;
 
     const total = price * amount;
+
+    // retry function. 
+    const handleRetry = () => {
+        if (activeTab) {
+            handleChange(activeTab as TransType);
+        }
+    };
+
 
     const TradeForBuy = () => { 
         return (
@@ -446,7 +460,15 @@ export function TradePanel() {
         activeTab === "sell" && (
         <TradeForSell />
         )
+      )}
+      { error && (
+        <ErrorToast 
+          error={error}
+          onRetry={error.isRetryable ? handleRetry : undefined}
+          onClose={clearError}
+        />
       )
+
       }
     </ContainerDiv>
   );

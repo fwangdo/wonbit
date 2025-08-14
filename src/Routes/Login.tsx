@@ -6,6 +6,9 @@ import { isLoginState, userIdState } from "../atoms/Atom";
 import {
     useRecoilState
 } from "recoil"; 
+import { UserNotFoundError } from '../errors/AppErrors';
+import { useErrorHandler } from '../hooks/useErrorHandler';
+import { ErrorToast } from '../errors/ErrorHandler';
 
 
 function Login() {
@@ -16,6 +19,8 @@ function Login() {
     const [isLogin, setIsLogin] = useRecoilState(isLoginState); 
     const [userId, setUserId ] = useRecoilState(userIdState); 
     const navigate = useNavigate(); 
+
+    const { error, handleError, clearError } = useErrorHandler(); 
 
     useEffect(() => {
         if (isLogin) {
@@ -40,23 +45,30 @@ function Login() {
     }
 
     const handleLogin = () => {
-        const existing = localStorage.getItem(USERS); 
-        let users = existing ? JSON.parse(existing) : []; 
+        try {
+            const existing = localStorage.getItem(USERS); 
+            let users = existing ? JSON.parse(existing) : []; 
 
-        // some => boolean. 
-        const found = users.some((user: IUser) => user.id === id && user.pwd === pwd); 
-        if (!found) {
-            alert("There is no account.");
-            return; 
+            // some => boolean. 
+            const found = users.some((user: IUser) => user.id === id && user.pwd === pwd); 
+            if (!found) {
+                throw new UserNotFoundError(id); 
+            }
+
+            // change status 
+            setIsLogin(true);
+            setUserId(id); 
+
+            // initializing. 
+            reinitState(); 
+        } catch (err) {
+            handleError(err); 
         }
-
-        // change status 
-        setIsLogin(true);
-        setUserId(id); 
-
-        // initializing. 
-        reinitState(); 
     }; 
+
+    const handleRetry = () => {
+        handleLogin();
+    };
     
     return (
         <Col>
@@ -70,6 +82,15 @@ function Login() {
                 </div>
                 </>
                 )
+            }
+
+            { error && (
+                <ErrorToast 
+                    error={error}
+                    onRetry={error.isRetryable ? handleRetry : undefined} 
+                    onClose={clearError}
+                /> 
+            )
             }
         </Col>
     ); 
