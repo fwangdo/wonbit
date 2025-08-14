@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { fetchCurPrice } from "../api"; 
 import { useQuery } from "@tanstack/react-query"; 
@@ -15,10 +14,8 @@ import {
     , BUY, SELL 
  } from "./Data";
 import { IReactProps } from "../Components/Member"; 
-
 import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError, AppError } from "../errors/AppErrors";
 import { useErrorHandler } from "../hooks/useErrorHandler";
-import { ErrorToast } from "../errors/ErrorHandler";
 
 
 function ContainerDiv({ children }: IReactProps) {
@@ -58,7 +55,7 @@ function TabDiv({
  const border_c = active ? "border-[red]" : null; 
 
  return (<div onClick={() => onClick("someValue")} className={`
-  flex
+  flex-1
   text-center
   p-[12px]
   cursor-pointer

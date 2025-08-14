@@ -45,6 +45,17 @@ export class UserNotFoundError extends AppError{
     }
 }
 
+export class AuthError extends AppError {
+    constructor() {
+        super(
+            'User not authenticated'
+            , 'AUTH_ERROR'
+            , 'Login'
+            , false 
+        ); 
+    }
+}
+
 export class ApiError extends AppError {
     constructor(message: string, isRetryable: boolean = true) {
         super(
