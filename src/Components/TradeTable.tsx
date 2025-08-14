@@ -17,14 +17,6 @@ import {
 import { IReactProps } from "../Components/Member"; 
 
 
-// const Container = styled.div`
-//   width: 800px;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   overflow: hidden;
-//   font-family: sans-serif;
-// `;
-
 function ContainerDiv({ children }: IReactProps) {
   return (
     <div className={`
@@ -41,11 +33,6 @@ function ContainerDiv({ children }: IReactProps) {
   )
 }
 
-// const TabMenu = styled.div`
-//   display: flex;
-//   border-bottom: 1px solid #ccc;
-// `;
-
 function TabMenuDiv({ children }: IReactProps) {
   return (<div className={`
     flex
@@ -56,22 +43,6 @@ function TabMenuDiv({ children }: IReactProps) {
     {children}
   </div>)
 }
-
-interface ITabProp {
-    active?: boolean;
-}
-
-// const Tab = styled.div.withConfig({
-//   shouldForwardProp: (prop) => prop !== 'active', 
-// })<ITabProp>`
-//   flex: 1;
-//   text-align: center;
-//   padding: 12px;
-//   cursor: pointer;
-//   font-weight: bold;
-//   color: ${(props) => (props.active ? "red" : "gray")};
-//   border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
-// `;
 
 function TabDiv({ 
   children, 
@@ -96,13 +67,6 @@ function TabDiv({
  </div>)
 }
 
-// const Form = styled.div`
-//   padding: 16px;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 12px;
-// `;
-
 function FormDiv({ children }: IReactProps) {
   return (<div
     className={`
@@ -116,12 +80,6 @@ function FormDiv({ children }: IReactProps) {
   </div>)
 }
 
-// const Row = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-// `;
-
 function RowDiv( {children }: IReactProps ) {
   return (<div
     className={`
@@ -134,25 +92,27 @@ function RowDiv( {children }: IReactProps ) {
   </div>)
 }
 
-// const Label = styled.label`
-//   font-size: 14px;
-// `;
-
 function Label({ children }: IReactProps) {
   return(<label className={`text-[14px]`}>
     {children}
   </label>)
 } 
 
-// const Input = styled.input`
-//   flex: 1;
-//   margin-left: 10px;
-//   padding: 8px;
-//   font-size: 14px;
-// `;
-
-function Input({...props}) {
-  return (<input {...props} className={`
+function Input({
+  type, 
+  value, 
+  onChange
+}: { 
+  type: string,
+  value: string | number, 
+  onChange?: React.ChangeEventHandler<HTMLInputElement>}
+) {
+  return (<input 
+    type={type} 
+    value={value} 
+    // note that how to use conditional usage in jsx. 
+    {...(onChange ? {onChange} : {})}
+    className={`
     flex-1
     ml-[10px]
     p-[8px]
@@ -160,44 +120,64 @@ function Input({...props}) {
   `}/>)
 }
 
-const PercentButtons = styled.div`
-  display: flex;
-  gap: 8px;
-`;
+function PercentButtons({ children }: IReactProps) {  
+  return (
+    <div 
+    className={`
+      flex
+      gap-[8px]
+    `}>
+      {children}
+    </div>
+  ); 
+}
 
+function PercentBtn( { 
+  children, 
+  onClick }: IReactProps & {
+    index?: number;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
+  }) {
+  return (<button
+    onClick={onClick}
+    className={`
+      flex-1
+      p-[6px]
+      text-[14px]
+      bg-[#eee]
+      border-[1px]
+      border-[#ccc]
+      cursor-pointer
+      hover:bg-[#ddd]
+      `}
+  >
+    {children}
+    </button>)
+} 
 
-const PercentBtn = styled.button`
-  flex: 1;
-  padding: 6px;
-  font-size: 14px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  &:hover {
-    background-color: #ddd;
-  }
-`;
-
-const AuthButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-`;
-
-const StyledBtn = styled.button`
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  margin: 0 5px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
+function StyledBtn({
+  children
+  , onClick
+}: IReactProps & {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+}) {
+  return (<button
+    onClick={onClick}
+    className={`
+      flex-1 
+      p-[10px]
+      text-[16px]
+      mx-[5px]
+      bg-[#007bff]
+      text-white
+      border-none
+      cursor-pointer
+      hover:bg-[#0056b3]
+    `}
+  >
+    {children}
+  </button>) 
+}
 
 // wallet. 
 function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
@@ -410,6 +390,7 @@ export function TradePanel() {
 
             <PercentButtons>
                 {[10, 25, 50, 100].map((percent) => (
+                // key is a special argument. 
                 <PercentBtn key={percent} onClick={() => setAmount((percent / 100) * 1)}>{percent}%</PercentBtn>
                 ))}
                 <PercentBtn>직접입력</PercentBtn>
