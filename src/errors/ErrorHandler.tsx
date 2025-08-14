@@ -10,10 +10,8 @@ interface ErrorToastProps {
 export function ErrorToast(
     {error, onRetry, onClose}: ErrorToastProps
 ) {
-    useEffect(() => {
-        alert(error.userMessage); 
-        onClose(); 
-    }, []); 
+    alert(error.userMessage); 
+    onClose(); 
 
     return null; 
     // return (

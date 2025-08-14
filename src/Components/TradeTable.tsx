@@ -187,7 +187,7 @@ function StyledBtn({
 function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
     const curUsd = userWallet.usd;
     if (curUsd < total) {
-        throw new InsufficientFundsError(total, userWallet.usd); 
+      throw new InsufficientFundsError(total, userWallet.usd); 
     }
 
     const newUsd = userWallet.usd - total; 
@@ -375,6 +375,7 @@ export function TradePanel() {
         alert(`주문이 완료되었습니다.`)
       } catch (err) {
           handleError(err); 
+          alert(error?.userMessage)
       }
     }
    
@@ -461,15 +462,6 @@ export function TradePanel() {
         <TradeForSell />
         )
       )}
-      { error && (
-        <ErrorToast 
-          error={error}
-          onRetry={error.isRetryable ? handleRetry : undefined}
-          onClose={clearError}
-        />
-      )
-
-      }
     </ContainerDiv>
   );
 }

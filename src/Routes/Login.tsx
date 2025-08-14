@@ -63,6 +63,7 @@ function Login() {
             reinitState(); 
         } catch (err) {
             handleError(err); 
+            alert(error?.userMessage)
         }
     }; 
 
@@ -82,15 +83,6 @@ function Login() {
                 </div>
                 </>
                 )
-            }
-
-            { error && (
-                <ErrorToast 
-                    error={error}
-                    onRetry={error.isRetryable ? handleRetry : undefined} 
-                    onClose={clearError}
-                /> 
-            )
             }
         </Col>
     ); 
