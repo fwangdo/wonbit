@@ -61,24 +61,28 @@ interface ITabProp {
     active?: boolean;
 }
 
-const Tab = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== 'active', 
-})<ITabProp>`
-  flex: 1;
-  text-align: center;
-  padding: 12px;
-  cursor: pointer;
-  font-weight: bold;
-  color: ${(props) => (props.active ? "red" : "gray")};
-  border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
-`;
+// const Tab = styled.div.withConfig({
+//   shouldForwardProp: (prop) => prop !== 'active', 
+// })<ITabProp>`
+//   flex: 1;
+//   text-align: center;
+//   padding: 12px;
+//   cursor: pointer;
+//   font-weight: bold;
+//   color: ${(props) => (props.active ? "red" : "gray")};
+//   border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
+// `;
 
-function TabDiv({ children, active, ...props }: IReactProps & {active: boolean}) {
+function TabDiv({ 
+  children, 
+  active, 
+  onClick 
+}: IReactProps & {active: boolean, onClick:(value: string) => void}) {
  const color = active ? "text-red" : "text-gray";
  const border_bw = active ? "border-b-[2px]" : null;  
  const border_c = active ? "border-[red]" : null; 
 
- return (<div {...props} className={`
+ return (<div onClick={() => onClick("someValue")} className={`
   flex
   text-center
   p-[12px]
@@ -92,34 +96,75 @@ function TabDiv({ children, active, ...props }: IReactProps & {active: boolean})
  </div>)
 }
 
-const Form = styled.div`
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
+// const Form = styled.div`
+//   padding: 16px;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 12px;
+// `;
 
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+function FormDiv({ children }: IReactProps) {
+  return (<div
+    className={`
+      p-[16px]
+      flex
+      flex-col
+      gap-[12px]
+    `}
+  >
+    {children}
+  </div>)
+}
 
-const Label = styled.label`
-  font-size: 14px;
-`;
+// const Row = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// `;
 
-const Input = styled.input`
-  flex: 1;
-  margin-left: 10px;
-  padding: 8px;
-  font-size: 14px;
-`;
+function RowDiv( {children }: IReactProps ) {
+  return (<div
+    className={`
+        flex
+        justify-center 
+        items-center
+      `}
+  >
+    {children}
+  </div>)
+}
+
+// const Label = styled.label`
+//   font-size: 14px;
+// `;
+
+function Label({ children }: IReactProps) {
+  return(<label className={`text-[14px]`}>
+    {children}
+  </label>)
+} 
+
+// const Input = styled.input`
+//   flex: 1;
+//   margin-left: 10px;
+//   padding: 8px;
+//   font-size: 14px;
+// `;
+
+function Input({...props}) {
+  return (<input {...props} className={`
+    flex-1
+    ml-[10px]
+    p-[8px]
+    text-[14px]
+  `}/>)
+}
 
 const PercentButtons = styled.div`
   display: flex;
   gap: 8px;
 `;
+
 
 const PercentBtn = styled.button`
   flex: 1;
@@ -352,16 +397,16 @@ export function TradePanel() {
 
     const TradeForBuy = () => { 
         return (
-            <Form>
-            <Row>
+            <FormDiv>
+            <RowDiv>
                 <Label>매수가격 (USD)</Label>
                 <Input type="number" value={price} />
-            </Row>
+            </RowDiv>
 
-            <Row>
+            <RowDiv>
                 <Label>주문수량 (BTC)</Label>
                 <Input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
-            </Row>
+            </RowDiv>
 
             <PercentButtons>
                 {[10, 25, 50, 100].map((percent) => (
@@ -370,37 +415,37 @@ export function TradePanel() {
                 <PercentBtn>직접입력</PercentBtn>
             </PercentButtons>
 
-            <Row>
+            <RowDiv>
                 <Label>주문총액 (USD)</Label>
                 <div>{total.toLocaleString()} USD</div>
-            </Row>
+            </RowDiv>
 
             <StyledBtn onClick={() => handleChange(BUY)}>매수</StyledBtn>
-            </Form>
+            </FormDiv>
         );
     }
 
 
     const TradeForSell = () => { 
         return (
-            <Form>
-            <Row>
+            <FormDiv>
+            <RowDiv>
                 <Label>매도가격 (USD)</Label>
                 <Input type="number" value={price} />
-            </Row>
+            </RowDiv>
 
-            <Row>
+            <RowDiv>
                 <Label>매도수량 (BTC)</Label>
                 <Input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
-            </Row>
+            </RowDiv>
 
-            <Row>
+            <RowDiv>
                 <Label>주문총액 (USD)</Label>
                 <div>{total.toLocaleString()} USD</div>
-            </Row>
+            </RowDiv>
 
             <StyledBtn onClick={() => handleChange(SELL)}>매도</StyledBtn>
-            </Form>
+            </FormDiv>
         );
     }
 
