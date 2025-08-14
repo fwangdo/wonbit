@@ -1,7 +1,7 @@
 import { useState } from 'react'; 
 import { AppError } from '../errors/AppErrors'; 
 
-export function userErrorHandler() {
+export function useErrorHandler() {
     const [error, setError] = useState<AppError | null>(null);
 
     const handleError = (error: unknown) => {

@@ -16,6 +16,10 @@ import {
  } from "./Data";
 import { IReactProps } from "../Components/Member"; 
 
+import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError } from "../errors/AppErrors";
+import { useErrorHandler } from "../hooks/useErrorHandler";
+import { ErrorToast } from "../errors/ErrorHandler";
+
 
 function ContainerDiv({ children }: IReactProps) {
   return (
@@ -183,8 +187,7 @@ function StyledBtn({
 function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
     const curUsd = userWallet.usd;
     if (curUsd < total) {
-        alert("you need to charge usd more. "); 
-        throw new Error(`current usd -> ${curUsd} but total number -> ${total}`);
+        throw new InsufficientFundsError(total, userWallet.usd); 
     }
 
     const newUsd = userWallet.usd - total; 
@@ -208,8 +211,7 @@ function reflectBuyOnWallet(userWallet: IWallet, total: number, coinId: string, 
 function reflectSellOnWallet(userWallet: IWallet, total: number, coinId: string, amount: number): IWallet {
     const curCoin = userWallet.coins[coinId] ?? 0; 
     if (curCoin < amount) {
-        alert("you do not have enough coin."); 
-        throw new Error(`current usd -> ${curCoin} but total number -> ${total}`);
+        throw new InsufficientCoinError(coinId, amount, curCoin); 
     }
 
     const newCoinAmount = curCoin - amount;
@@ -280,7 +282,8 @@ function reflectOnHist(type: TransType, userHist: IHistory, total: number, coinI
 function genNewDatas<T extends {id: string}>(userId: string, userDatas: T[], newUserData: T): T[] {
     const idx = userDatas.findIndex((Data) => Data.id === userId); 
     if (idx === -1) {
-      throw new Error(`${userId} does not exist in Data`)
+      // throw new Error(`${userId} does not exist in Data`)
+      throw new UserNotFoundError(userId); 
     }
 
     return [
@@ -296,7 +299,7 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
     const tempHistData = localStorage.getItem(HIST);  
 
     if (!tempWalletData || !tempHistData) {
-        throw new Error(`walletData -> ${tempWalletData}, histData -> ${tempHistData}`)
+        throw new UserNotFoundError(userId); 
     }
 
     const walletData: IWallet[] = JSON.parse(tempWalletData); 
@@ -306,9 +309,7 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
     const userHistories = histData.filter((data) => data.id === userId );  
 
     if (userWallets.length !== 1 || userHistories.length !== 1) {
-        alert(`there is another id or no id.`); 
-        console.log(`userWallets -> ${userWallets}, userHist-> ${userHistories}`)
-        throw new Error(`wallets -> ${userWallets.length}, hists -> ${userHistories.length}, histData -> ${histData}`) 
+        throw new UserNotFoundError(userId); 
     } 
 
     const userWallet = userWallets[0]; 
@@ -335,6 +336,7 @@ function changeData(userId: string, type: TransType, total: number, coinId: stri
 export function TradePanel() {
     // hook should be on the top always!
     const userId = useRecoilValue(userIdState); 
+    const { error, handleError, clearError } = useErrorHandler(); 
     const { coinId } = useParams<{coinId : string}>(); 
     const [activeTab, setActiveTab] = useState("buy");
     
@@ -343,7 +345,8 @@ export function TradePanel() {
         queryFn: () => {
             // handling nullabe case. 
             if (!coinId) {
-                throw new Error('coinId is required'); 
+                // throw new Error('coinId is required'); 
+                throw new ApiError('coinId is required', false);  
             }
             return fetchCurPrice(coinId)
         },  
