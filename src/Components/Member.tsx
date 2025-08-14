@@ -39,3 +39,8 @@ export function StyledBtn({...props}: React.ButtonHTMLAttributes<HTMLButtonEleme
         />
     )
 };
+
+
+export interface IReactProps {
+    children?: React.ReactNode
+}

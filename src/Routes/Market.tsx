@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"; 
 import { fetchCoins, fetchCoinHistory, fetchCoinCandle  } from "../api";
 import type { IMarketData, ICandleData } from "../api";
-import { styled } from "styled-components"; 
+// import { styled } from "styled-components"; 
 import { Outlet
     , useNavigate
     , useParams 
@@ -13,7 +13,7 @@ import { useRecoilValue } from "recoil";
 import { isLoginState } from "../atoms/Atom";  
 import { TradePanel } from "../Components/TradeTable"; 
 import { CoinTable } from "./CoinTable"; 
-import { StyledBtn } from "../Components/Member";
+import { StyledBtn, IReactProps } from "../Components/Member";
 
 
 export function MarketIndexRedirect() {
@@ -32,73 +32,17 @@ export function MarketIndexRedirect() {
   return <div>Loading...</div>;
 }
 
-// loader.
-const Loader = styled.span`
-    text-align: center;
-    display: block; 
-`
+function Loader({children}: IReactProps) {
+    return (<div className={`
+        text-center
+        block
+    `}>
+        {children}
+    </div>)
+} 
 
 /* To generate table.
 */
-
-const PastCoinTable = styled.table`
-    /* padding: 30px; // top right bottom left */
-    width: auto;
-    border-collapse: collapse;
-    justify-content: center;
-`; 
-
-const Thead = styled.thead`
-    background-color: #f5f5f5;
-`;
-
-const Th = styled.th`
-    padding: 10px;
-    border: 1px solid #ffffff;
-    text-align: left;
-    font-size: 13px;
-    ` 
-
-const TdBase = styled.td`
-    padding: 8px;
-    border: 0.5px solid #ddd; 
-    font-size: 15px;
-    background-color: #ffffff;
-`; 
-
-const TdName = styled(TdBase)`
-    display: flex;
-    text-align: left;
-`
-
-const TdElem = styled(TdBase)`
-    text-align: right;
-`
-
-const Td = styled.td`
-    padding: 10px;
-    border: 1px solid #ddd; 
-    font-size: 15px;
-`; 
-
-const Tr = styled.tr`
-`
-
-const TableWrapper = styled.div`
-  margin-left: auto;
-  width: 400px; /* 원하는 폭 지정 가능 */
-  /* flex: 1; */
-`;
-
-const ChartWrapper = styled.div`
-  flex: 1;
-  /* margin-right: 20px; */
-`;
-
-const TradeWrapper = styled.div`
-    flex: 1; 
-`
-
 
 export interface ICoinData {
     current_price: number; 
@@ -111,43 +55,6 @@ export interface ICoinData {
     price_change_percentage_24h: number; 
     symbol: string; 
 }; 
-
-function GenPastCoinTable(data: ICoinData[]
-                    , navigate: NavigateFunction
-                    ) {
-    
-    return (
-        <PastCoinTable>
-            <Thead>
-                <Tr>
-                    <Th>Name</Th>
-                    <Th>Price</Th>
-                    <Th>Updates</Th>
-                </Tr> 
-            </Thead>
-            <tbody>
-                {data.map((coin) =>(
-                    <Tr key={coin.symbol}>
-                        <TdName>
-                            <div 
-                            onClick={() => navigate(`/market/${coin.id}`, {
-                                state: { 
-                                    id: coin.id,  
-                                }
-                            })}
-                            style={{cursor: 'pointer'}}
-                            > 
-                                {coin.symbol}
-                            </div>
-                        </TdName>
-                        <TdElem>{coin.current_price}</TdElem>
-                        <TdElem>{coin.price_change_percentage_24h}</TdElem>
-                    </Tr>
-                ))}
-            </tbody>
-        </PastCoinTable>
-    );
-};
 
 
 export function CoinChart() {
