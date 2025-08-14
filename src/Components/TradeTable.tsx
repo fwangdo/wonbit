@@ -17,6 +17,7 @@ import { IReactProps } from "../Components/Member";
 import { InsufficientCoinError, InsufficientFundsError, UserNotFoundError, ApiError, AppError } from "../errors/AppErrors";
 import { useErrorHandler } from "../hooks/useErrorHandler";
 import { useTrading } from "../hooks/useTrading";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 
 function ContainerDiv({ children }: IReactProps) {
@@ -159,12 +160,15 @@ function PercentBtn( {
 
 function StyledBtn({
   children
+  , disabled
   , onClick
 }: IReactProps & {
+  disabled: boolean
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (<button
     onClick={onClick}
+    disabled={disabled}
     className={`
       flex-1 
       p-[10px]
@@ -255,7 +259,12 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </RowDiv>
 
-            <StyledBtn onClick={() => handleChange(BUY)}>매수</StyledBtn>
+            <StyledBtn 
+              onClick={() => handleChange(BUY)}
+              disabled={isTrading}
+              >
+              {isTrading ? "Ongoing.." : "매수"}
+            </StyledBtn>
             </FormDiv>
         );
     }
@@ -279,7 +288,12 @@ export function TradePanel() {
                 <div>{total.toLocaleString()} USD</div>
             </RowDiv>
 
-            <StyledBtn onClick={() => handleChange(SELL)}>매도</StyledBtn>
+            <StyledBtn 
+              onClick={() => handleChange(SELL)}
+              disabled={isTrading}
+            >
+              {isTrading ? "Ongoing.." : "매도"}
+            </StyledBtn>
             </FormDiv>
         );
     }
