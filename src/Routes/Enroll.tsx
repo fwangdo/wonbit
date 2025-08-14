@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"; 
+import React from "react"; 
 import styled from "styled-components";
-import { Col, InputStyle, StyledInputProps, StyledInput, StyledBtn} from "../Components/Member"; 
+import { Col, StyledInput, StyledBtn} from "../Components/Member"; 
 import { useFormStore, initialState } from "../stores/useFormStore"; 
 import { USERS
         , IUser

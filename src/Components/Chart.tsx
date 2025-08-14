@@ -1,8 +1,5 @@
-import { useQuery } from "@tanstack/react-query"; 
 import ApexChart from "react-apexcharts"; 
-import { fetchCoins, fetchCoinHistory, IMarketData, ICandleData } from "../api";
-import { Routes, Route, Link, useParams, Outlet } from "react-router-dom";
-import { useEffect, useState } from 'react'; 
+import { IMarketData, ICandleData } from "../api";
 
 
 interface ShortLongData {

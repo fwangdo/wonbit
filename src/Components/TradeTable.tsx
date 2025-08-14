@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { fetchCurPrice } from "../api"; 
 import { useQuery } from "@tanstack/react-query"; 
 import { useRecoilValue } from "recoil"; 
 import { userIdState } from "../atoms/Atom";
-import { USERS
-    , WALLET
+import { 
+     WALLET
     , HIST
     , IWallet
     , IHistory

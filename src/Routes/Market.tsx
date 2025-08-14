@@ -1,17 +1,14 @@
 import { useQuery } from "@tanstack/react-query"; 
-import ApexChart from "react-apexcharts"; 
 import { fetchCoins, fetchCoinHistory, fetchCoinCandle  } from "../api";
 import type { IMarketData, ICandleData } from "../api";
 import { styled } from "styled-components"; 
 import { Outlet
     , useNavigate
     , useParams 
-    , useLocation
     , NavigateFunction 
 } from "react-router-dom";
 import { useEffect, useState } from 'react'; 
 import Chart from '../Components/Chart'; 
-import Login from "./Login";
 import { useRecoilValue } from "recoil"; 
 import { isLoginState } from "../atoms/Atom";  
 import { TradePanel } from "../Components/TradeTable"; 
