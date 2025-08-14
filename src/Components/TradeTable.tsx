@@ -14,20 +14,48 @@ import {
     , TransType
     , BUY, SELL 
  } from "./Data";
+import { IReactProps } from "../Components/Member"; 
 
 
-const Container = styled.div`
-  width: 800px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  overflow: hidden;
-  font-family: sans-serif;
-`;
+// const Container = styled.div`
+//   width: 800px;
+//   border: 1px solid #ccc;
+//   border-radius: 4px;
+//   overflow: hidden;
+//   font-family: sans-serif;
+// `;
 
-const TabMenu = styled.div`
-  display: flex;
-  border-bottom: 1px solid #ccc;
-`;
+function ContainerDiv({ children }: IReactProps) {
+  return (
+    <div className={`
+      w-[800px]
+      border-[1px]
+      border-solid
+      border-[#ccc]
+      rounded-[4px]
+      overflow-hideen 
+      font-sans 
+    `}>
+      {children}
+    </div>
+  )
+}
+
+// const TabMenu = styled.div`
+//   display: flex;
+//   border-bottom: 1px solid #ccc;
+// `;
+
+function TabMenuDiv({ children }: IReactProps) {
+  return (<div className={`
+    flex
+    border-b    
+    border-[#ccc]
+    border-solid
+  `}>
+    {children}
+  </div>)
+}
 
 interface ITabProp {
     active?: boolean;
@@ -44,6 +72,25 @@ const Tab = styled.div.withConfig({
   color: ${(props) => (props.active ? "red" : "gray")};
   border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
 `;
+
+function TabDiv({ children, active, ...props }: IReactProps & {active: boolean}) {
+ const color = active ? "text-red" : "text-gray";
+ const border_bw = active ? "border-b-[2px]" : null;  
+ const border_c = active ? "border-[red]" : null; 
+
+ return (<div {...props} className={`
+  flex
+  text-center
+  p-[12px]
+  cursor-pointer
+  font-bold
+  ${color}
+  ${border_bw}
+  ${border_c}
+ `}>
+  {children}
+ </div>)
+}
 
 const Form = styled.div`
   padding: 16px;
@@ -358,11 +405,11 @@ export function TradePanel() {
     }
 
   return (
-    <Container>
-      <TabMenu>
-        <Tab active={activeTab === "buy"} onClick={() => setActiveTab("buy")}>매수</Tab>
-        <Tab active={activeTab === "sell"} onClick={() => setActiveTab("sell")}>매도</Tab>
-      </TabMenu>
+    <ContainerDiv>
+      <TabMenuDiv>
+        <TabDiv active={activeTab === "buy"} onClick={() => setActiveTab("buy")}>매수</TabDiv>
+        <TabDiv active={activeTab === "sell"} onClick={() => setActiveTab("sell")}>매도</TabDiv>
+      </TabMenuDiv>
 
       {(activeTab === "buy" && (
         <TradeForBuy />
@@ -372,6 +419,6 @@ export function TradePanel() {
         )
       )
       }
-    </Container>
+    </ContainerDiv>
   );
 }
