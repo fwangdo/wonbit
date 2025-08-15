@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil"; 
+// import { useRecoilValue } from "recoil"; 
+import { useAuthStore } from "../stores/authStore";
 import { userIdState } from "../atoms/Atom";
 import { 
      WALLET
@@ -169,7 +170,8 @@ function executeTradeLogin(userId: string, type: TransType, total: number, coinI
 
 
 export function useTrading(coinId: string ) {
-    const userId = useRecoilValue(userIdState);
+    // const userId = useRecoilValue(userIdState);
+    const userId = useAuthStore(state => state.userId); 
     const [isTrading, setIsTrading] = useState(false); 
     const { handleError } = useErrorHandler(); 
 

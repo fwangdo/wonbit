@@ -8,9 +8,9 @@ import Support from "./Routes/Support";
 import Login from "./Routes/Login"; 
 import Enroll from "./Routes/Enroll"; 
 import { styled } from "styled-components";
-import {
-  RecoilRoot, 
-} from "recoil"; 
+// import {
+//   RecoilRoot, 
+// } from "recoil"; 
 
 const ContentWrapper = styled.div`
   background-color: #f0f0f0;
@@ -44,11 +44,11 @@ function Main() {
 function App() {
 
   return (
-    <RecoilRoot>
+    // <RecoilRoot>
       <Router>
         <Main />
       </Router>
-    </RecoilRoot>
+    // </RecoilRoot>
   );
 }
 
