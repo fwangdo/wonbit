@@ -45,6 +45,17 @@ export class UserNotFoundError extends AppError{
     }
 }
 
+export class CoinNotFoundError extends AppError{
+    constructor(coinId: string) {
+        super(
+            `Coin not found: ${coinId}`,
+            `COIN_NOT_FOUND`,
+            `Cannot find coin information. Please check out information again.`,
+            false
+        ); 
+    }
+}
+
 export class AuthError extends AppError {
     constructor() {
         super(
