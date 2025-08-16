@@ -4,6 +4,32 @@ import { AppError, UserNotFoundError } from "../errors/AppErrors";
 
 export class StorageService {
 
+    // Users. 
+    static getUsers(): IUser[] {
+        const data = localStorage.getItem(USERS); 
+        return data ? JSON.parse(data) : [];
+    }
+
+    static saveUsers(users: IUser[]): void {
+        localStorage.setItem(USERS, JSON.stringify(users)); 
+    }
+
+    static getUser(userId: string): IUser {
+        const users = this.getUsers();
+        const userIdx = users.findIndex((user) => user.id === userId);
+
+        if (userIdx === -1 ) {
+            throw new UserNotFoundError(userId); 
+        }
+
+        return users[userIdx]; 
+    }; 
+
+    static updateUser(newUser: IUser): IUser[] {
+        const users = this.getUsers(); 
+        return [...users, newUser]; 
+    }
+
     // Wallet. 
     static getWallets(): IWallet[] {
         const data = localStorage.getItem(WALLET); 
