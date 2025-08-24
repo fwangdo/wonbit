@@ -2,17 +2,7 @@ import { isLoginState, userIdState } from "../atoms/Atom";
 import { useRecoilState, useRecoilValue } from "recoil";  
 import { useNavigate } from "react-router-dom";
 import { StyledBtn } from "../Components/Member";
-// import styled from "styled-components"; 
 import { IWallet, WALLET } from "../Components/Data";
-
-// const MiddleDiv = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     height: 200vh;
-//     gap: 30px;
-//     padding: 30px; 
-// `
 
 interface IReactProps {
     children?: React.ReactNode;
@@ -33,10 +23,6 @@ function MiddleDiv({ children }: IReactProps) {
     )
 }
 
-// const UserIdDiv = styled.div`
-//     font-size: 30px ;
-// `
-
 function UserIdDiv({children}: IReactProps) {
     return (
     <div className={`
@@ -46,12 +32,6 @@ function UserIdDiv({children}: IReactProps) {
     </div>
     ) 
 }
-
-// const CoinsList = styled.ul`
-//   list-style: none;
-//   padding-left: 0;
-//   margin: 0;
-// `;
 
 function CoinsList({ children }: IReactProps) {
     return (
@@ -64,20 +44,6 @@ function CoinsList({ children }: IReactProps) {
         </div>
     )
 }
-
-// const Coin = styled.li`
-//     display: flex;
-//     list-style: none;
-//     background-color: white;
-//     color: #2f3640;   
-//     border-radius: 15px;
-//     margin-bottom: 10px;
-//     font-size: 20px;
-//     width: 500px;
-//     height: 40px;
-//     align-items: center;
-//     padding: 0 0 0 20px; 
-// `
 
 function Coin({ children }: IReactProps) {
     return (<div className={`

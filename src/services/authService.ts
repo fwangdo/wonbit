@@ -19,7 +19,7 @@ export class AuthService {
       const { id, password } = request;
       const users = StorageService.getUsers();
       
-      const user = users.find(u => u.id === id && u.pwd === password);
+      const user = users.find((u) => u.id === id && u.pwd === password);
       
       if (!user) {
         return {

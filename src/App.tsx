@@ -8,15 +8,11 @@ import Support from "./Routes/Support";
 import Login from "./Routes/Login"; 
 import Enroll from "./Routes/Enroll"; 
 import { styled } from "styled-components";
-// import {
-//   RecoilRoot, 
-// } from "recoil"; 
 
 const ContentWrapper = styled.div`
   background-color: #f0f0f0;
   min-height: calc(100vh - 60px);
   padding: 5px; 
-  /* display: flex; */
 `
 
 function Main() {
@@ -44,11 +40,9 @@ function Main() {
 function App() {
 
   return (
-    // <RecoilRoot>
       <Router>
         <Main />
       </Router>
-    // </RecoilRoot>
   );
 }
 

@@ -30,5 +30,5 @@ export const useTradingStore = create<TradingStore>() (
                 set({ amount: 0}, false, 'resetAmount')
 
         }), {name: 'trading-store'}
-    )
+)
 )

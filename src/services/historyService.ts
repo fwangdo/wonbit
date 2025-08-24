@@ -10,7 +10,7 @@ export class HistoryService {
         , price: number 
     ): IHistory {
 
-        const newTransaction: ITrans = {
+    const newTransaction: ITrans = {
             date: Date.now(),  
             type: type,
             coin: coinId, 

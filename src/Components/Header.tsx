@@ -1,9 +1,7 @@
 import React from "react"; 
 import { Link, useMatch, useLocation } from 'react-router-dom'; 
 import wonbit from '../Assets/wonbit.jpeg'; 
-// import { useRecoilState } from "recoil"; 
 import { useAuthStore } from "../stores/authStore";
-import { isLoginState } from '../atoms/Atom'; 
 import { BlueColor } from './CommonColor';
 import { theme } from '../theme'; 
 
@@ -75,7 +73,7 @@ function Header() {
     const enrollMatch = useMatch('/enroll')
 
     // recoil state
-    const [isLogin, setIsLogin] = useAuthStore();  
+    const {isLogin, setIsLogin} = useAuthStore();  
 
     const execLogout = () => {
         setIsLogin(false); 
