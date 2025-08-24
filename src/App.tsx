@@ -7,19 +7,29 @@ import History from "./Routes/History";
 import Support from "./Routes/Support"; 
 import Login from "./Routes/Login"; 
 import Enroll from "./Routes/Enroll"; 
-import { styled } from "styled-components";
+// import { styled } from "styled-components";
 
-const ContentWrapper = styled.div`
-  background-color: #f0f0f0;
-  min-height: calc(100vh - 60px);
-  padding: 5px; 
-`
+// const ContentWrapper = styled.div`
+//   background-color: #f0f0f0;
+//   min-height: calc(100vh - 60px);
+//   padding: 5px; 
+// `
+
+function Container({children}: {children: React.ReactNode}) {
+  return (<div className='
+    bg-[#f0f0f0]
+    min-h-[calc(100vh-60px)]
+    p-[5px]
+  '>
+    {children}
+  </div>)
+}
 
 function Main() {
   return (
       <>
         <Header />
-        <ContentWrapper>
+        <Container>
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/market" element={<Market />}>
@@ -32,7 +42,7 @@ function Main() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/enroll" element={<Enroll/>}/>
           </Routes>
-        </ContentWrapper>
+        </Container>
       </>
   ); 
 }
