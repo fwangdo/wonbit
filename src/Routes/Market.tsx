@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"; 
 import { fetchCoins, fetchCoinHistory, fetchCoinCandle  } from "../api";
 import type { IMarketData, ICandleData } from "../api";
-// import { styled } from "styled-components"; 
 import { Outlet
     , useNavigate
     , useParams 
