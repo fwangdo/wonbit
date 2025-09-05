@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthStore>()(
                 set({ isLogin: false, userId: null}, false, 'logout'), 
 
             setIsLogin: (isLogin: boolean) =>
-                set({isLogin: true}, false, 'setIsLogin'), 
+                set({ isLogin }, false, 'setIsLogin'), 
 
             setUserId: (userId: string | null) => 
                 set({ userId }, false, 'setUserId')
