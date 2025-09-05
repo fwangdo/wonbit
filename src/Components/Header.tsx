@@ -72,7 +72,7 @@ function Header() {
     const loginMatch = useMatch('/login')
     const enrollMatch = useMatch('/enroll')
 
-    // recoil state
+    // zustand.  
     const {isLogin, setIsLogin} = useAuthStore();  
 
     const execLogout = () => {
