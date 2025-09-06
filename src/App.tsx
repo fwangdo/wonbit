@@ -7,13 +7,6 @@ import History from "./Routes/History";
 import Support from "./Routes/Support"; 
 import Login from "./Routes/Login"; 
 import Enroll from "./Routes/Enroll"; 
-// import { styled } from "styled-components";
-
-// const ContentWrapper = styled.div`
-//   background-color: #f0f0f0;
-//   min-height: calc(100vh - 60px);
-//   padding: 5px; 
-// `
 
 function Container({children}: {children: React.ReactNode}) {
   return (<div className='
